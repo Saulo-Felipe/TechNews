@@ -1,11 +1,11 @@
-import "./globals.css";
+import "@/app/globals.css";
 import type { Metadata } from "next";
 import { Header } from "@/components/Header/Header";
 
 
 export const metadata: Metadata = {
   title: "TechNews - Noticias",
-  description: "",
+  description: "Noticias diares sobre tecnologia",
   icons: "/technews-favicon.ico"
 };
 

@@ -8,6 +8,7 @@ export function SubHeader() {
         <AiOutlineCloud className="w-6 h-6" />
         <div>14º Campina Grande - PB</div>
       </div>
+      
       <div className="flex-[0.3] text-center">Segunda, 04 de outubro de 2023</div>
       <div className="flex-[0.3]"></div>
     </div>
