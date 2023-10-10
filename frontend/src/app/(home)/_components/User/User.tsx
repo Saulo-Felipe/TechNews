@@ -2,7 +2,7 @@ import { BiSolidUser } from "react-icons/bi";
 
 export async function User() {
 
-  await new Promise(resolve => setTimeout(resolve, 4000));
+  // await new Promise(resolve => setTimeout(resolve, 4000));
 
   return (
     <div className="flex items-center gap-2">

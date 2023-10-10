@@ -15,8 +15,8 @@ export function Header() {
         <Suspense fallback={<span className="animate-pulse bg-[rgb(0,0,0,0.25)] w-20 h-6 rounded-md" />}>
           <SubHeaderContent />
         </Suspense>
-      </div>        
-      
+      </div>
+
       <section className="flex items-center justify-between px-main-container">
         <Image width={70} height={70} src={"/images/logotipo.png"} alt="logotipo da technews" />
 
@@ -25,13 +25,13 @@ export function Header() {
           <div>categoria 2</div>
           <div>categoria 3</div>
           <div>categoria 4</div>
-          <div>categoria 5</div>
+          <div>categoria 8</div>
         </nav>
 
-        <div className="flex transition hover:flex-[0.55]">
-          <input 
-            type="text" 
-            placeholder="Faça uma pesquisa" 
+        <div className="flex transition ">
+          <input
+            type="text"
+            placeholder="Faça uma pesquisa"
             className="bg-[#121212] flex-1 transition placeholder-[#4C4C4C] p-3 outline-none pl-4 rounded-l-md hover:brightness-110"
           />
 
