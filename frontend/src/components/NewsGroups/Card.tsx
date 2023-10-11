@@ -1,0 +1,38 @@
+import React from "react";
+
+interface CardProps {
+  title: string;
+  imageUrl: string;
+
+  height?: string;
+  width?: string;
+  description?: string;
+  rankingPosition?: number;
+}
+
+
+export function NewsCard({description, imageUrl, title, rankingPosition, height="h-40", width="w-1/3"}: CardProps) {
+
+  return (
+    <div className={`${width} group cursor-pointer border border-transparent hover:border-neutral-200 w-40`}>
+      <div className="bg-black overflow-hidden relative">
+        {rankingPosition && ( 
+          <span className="
+            bg-default-red text-white absolute z-10 right-0 top-0 
+            h-8 w-8 rounded-bl-2xl font-bold items-center flex justify-center
+          ">{rankingPosition}</span>
+        )}
+        <div 
+          className={`w-full opacity-75 ${height} bg-cover bg-center group-hover:scale-110 transition`}
+          style={{backgroundImage: `url(${imageUrl})`}} 
+        />
+      </div>
+
+      <div className="group-hover:text-default-red transition font-bold text-xl pt-2">
+        {title}
+      </div>
+
+      <div className="">{description}</div>
+    </div>
+  );
+}

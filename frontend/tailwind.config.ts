@@ -15,7 +15,25 @@ const config: Config = {
         "radial-gradient": "radial-gradient(transparent, black)"
       },
       padding: {
-        "main-container": "12rem"
+        "desktop-container": "8rem",
+        "tablet-container": "4rem",
+        "smartphone-container": "0.5rem",
+      },
+      colors: {
+        "default-red": "#CF2C2C"
+      }
+    },
+    
+    screens: {
+      smartphone: {
+        max: "640px",
+      },
+      tablet: {
+        max: "1024px",
+        min: "640px"
+      },
+      mobile: {
+        max: "1024px"
       }
     }
   },

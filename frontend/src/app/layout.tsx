@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={`${ubuntuFont.className} text-sm`}>
+      <body className={`${ubuntuFont.className} text-sm bg-neutral-100`}>
         <Header />
         {children}
       </body>
