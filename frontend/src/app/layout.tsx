@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Header } from "@/components/Header/Header";
 import { Ubuntu } from "next/font/google";
+import { twMerge } from "tailwind-merge";
 
 const ubuntuFont = Ubuntu({subsets: ["latin"], weight: ["300", "400", "500", "700"]});
 
@@ -17,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={`${ubuntuFont.className} text-sm bg-neutral-100`}>
+      <body className={twMerge(ubuntuFont.className, "text-sm bg-neutral-100")}>
         <Header />
         {children}
       </body>

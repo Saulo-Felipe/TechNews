@@ -12,7 +12,7 @@ export function Header() {
     <header className="bg-black text-white">
       <section className="px-desktop bg-[#121212] text-xs py-2 flex items-center justify-between tablet:px-tablet smartphone:px-smartphone">
         <div className="items-center flex gap-2">
-          <CiCloudOn className={"w-6 h-6"} />
+          <CiCloudOn className="w-6 h-6" />
 
           <Suspense fallback={<span className="animate-pulse bg-[rgb(0,0,0,0.25)] w-20 h-6 rounded-md" />}>
             <SubHeaderContent />
