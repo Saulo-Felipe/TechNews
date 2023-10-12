@@ -14,9 +14,9 @@ interface CardProps {
 export function NewsCard({description, imageUrl, title, rankingPosition, height="h-40", width="w-1/3"}: CardProps) {
 
   return (
-    <div className={`${width} group cursor-pointer border border-transparent hover:border-neutral-200 w-40`}>
+    <div className={`${width} group cursor-pointer border border-transparent`}>
       <div className="bg-black overflow-hidden relative">
-        {rankingPosition && ( 
+        {typeof rankingPosition !== "undefined" && ( 
           <span className="
             bg-default-red text-white absolute z-10 right-0 top-0 
             h-8 w-8 rounded-bl-2xl font-bold items-center flex justify-center

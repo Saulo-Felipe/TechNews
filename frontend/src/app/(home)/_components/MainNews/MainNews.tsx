@@ -4,7 +4,7 @@ export function MainNews() {
 
 
   return (
-    <div className="mt-10 flex gap-2 h-[70vh]">
+    <div className="mt-10 flex gap-2 h-[70vh] smartphone:flex-col">
       <Card 
         cardPadding="p-8"
         imageURL="/images/example-1.webp"

@@ -15,12 +15,15 @@ const config: Config = {
         "radial-gradient": "radial-gradient(transparent, black)"
       },
       padding: {
-        "desktop-container": "8rem",
-        "tablet-container": "4rem",
-        "smartphone-container": "0.5rem",
+        "desktop": "8rem",
+        "tablet": "4rem",
+        "smartphone": "0.5rem",
       },
       colors: {
         "default-red": "#CF2C2C"
+      },
+      boxShadow: {
+        "3xl": "0 0 10px 0px rgb(0 0 0 / 71%)"
       }
     },
     
@@ -29,11 +32,11 @@ const config: Config = {
         max: "640px",
       },
       tablet: {
-        max: "1024px",
+        max: "1150px",
         min: "640px"
       },
       mobile: {
-        max: "1024px"
+        max: "1150px"
       }
     }
   },

@@ -26,7 +26,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="px-desktop-container pb-32">
+    <div className="px-desktop pb-32 tablet:px-tablet smartphone:px-smartphone">
       <MainNews />
 
       <NewsGroup groupLink="#" groupTitle="Últimas Notícias" news={fakeNews} />

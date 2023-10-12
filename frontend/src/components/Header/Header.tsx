@@ -4,12 +4,13 @@ import { Suspense } from "react";
 import { UserLoading } from "@/components/Header/User/UserLoading";
 import { User } from "@/components/Header/User/User";
 import { CiCloudOn, CiSearch } from "react-icons/ci";
+import { RiMenu4Line } from "react-icons/ri";
 
 
 export function Header() {
   return (
     <header className="bg-black text-white">
-      <section className="px-desktop-container bg-[#2B2B2B] text-xs py-2 flex items-center justify-between">
+      <section className="px-desktop bg-[#121212] text-xs py-2 flex items-center justify-between tablet:px-tablet smartphone:px-smartphone">
         <div className="items-center flex gap-2">
           <CiCloudOn className={"w-6 h-6"} />
 
@@ -18,20 +19,26 @@ export function Header() {
           </Suspense>
         </div>
 
-        <div>Segunda, 04 de outubro de 2023</div>
+        <div className="smartphone:hidden">Segunda, 04 de outubro de 2023</div>
       </section>
 
-      <section className="flex items-center justify-between px-desktop-container">
-        <div className="flex items-center gap-6">
-          <Image width={70} height={70} src={"/images/logotipo.png"} alt="logotipo da technews" />
+      <section className="flex items-center justify-between px-desktop tablet:px-tablet smartphone:px-smartphone smartphone:gap-2">
+        <div className="flex items-center gap-6 smartphone:gap-2">
+          <Image 
+            width={70} 
+            height={70} 
+            src={"/images/logotipo.png"} 
+            alt="logotipo da technews" 
+            className="smartphone:w-14"
+          />
 
           <Suspense fallback={<UserLoading />}>
             <User />
           </Suspense>
         </div>
 
-        <div className="flex items-center gap-6">
-          <nav className="flex gap-3">
+        <div className="flex items-center gap-6 smartphone:gap-2 smartphone:flex-1">
+          <nav className="flex gap-3 mobile:hidden">
             <div>categoria 1</div>
             <div>categoria 2</div>
             <div>categoria 3</div>
@@ -39,7 +46,7 @@ export function Header() {
             <div>categoria 8</div>
           </nav>
 
-          <div className="flex rounded-md transition bg-[#121212]">
+          <div className="flex rounded-md transition bg-[#121212] smartphone:flex-1">
             <input
               type="text"
               placeholder="Faça uma pesquisa"
@@ -47,12 +54,18 @@ export function Header() {
               bg-[#121212] flex-1 transition placeholder-[#4C4C4C] p-3 
                 outline-none pl-4 hover:brightness-110 rounded-md
                 text-neutral-200
+                smartphone:p-2 text-xs
               "
             />
 
             <button className=" p-2 px-3 flex items-center justify-center rounded-md hover:brightness-110">
               <CiSearch className="text-base" />
             </button>
+          </div>
+
+          {/* only mobile */}
+          <div className="hidden mobile:block">
+            <RiMenu4Line className="text-xl" />
           </div>
         </div>
 
