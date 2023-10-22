@@ -30,6 +30,7 @@ const config: Config = {
     screens: {
       smartphone: {
         max: "640px",
+        min: "0px"
       },
       tablet: {
         max: "1150px",

@@ -8,9 +8,10 @@ datasource db {
 }
 
 model News {
-  id      Int    @id @default(autoincrement())
-  title   String @db.VarChar(255)
-  content String @db.Text
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(255)
+  content    String   @db.VarChar
+  images_url String[]
 }
 
 model User {

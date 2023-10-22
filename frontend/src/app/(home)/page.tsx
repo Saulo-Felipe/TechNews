@@ -1,6 +1,6 @@
 import { NewsCarouselGroup } from "@/components/NewsGroups/CarouselGroup";
 import { MainNews } from "./_components/MainNews/MainNews";
-import { News, NewsGroup } from "@/components/NewsGroups/Group";
+import { News, NewsGroup } from "@/components/NewsGroups/SimpleGroup";
 
 export default function Home() {
 

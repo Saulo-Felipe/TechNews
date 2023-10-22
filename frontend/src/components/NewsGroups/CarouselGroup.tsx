@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { NewsCard } from "./Card";
-import { NewsGroupProps } from "./Group";
+import { NewsGroupProps } from "./SimpleGroup";
 import { Title } from "./Title";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 
@@ -16,7 +16,7 @@ export function NewsCarouselGroup({ groupLink, groupTitle, news}: NewsGroupProps
   function handleCarouselBack() {
     carouselRef.current?.scrollBy(-400, 0);
   }
-  
+
   return (
     <div className="pt-10 flex flex-col gap-4">
       <Title title={groupTitle} link={groupLink} />
@@ -30,7 +30,7 @@ export function NewsCarouselGroup({ groupLink, groupTitle, news}: NewsGroupProps
           </div>
         </div>
 
-        <div 
+        <div
           className="
             bg-white border rounded-full h-10 w-10 -left-6 z-10 absolute smartphone:left-0
             flex items-center justify-center shadow-3xl cursor-pointer hover:scale-110 transition
@@ -39,8 +39,8 @@ export function NewsCarouselGroup({ groupLink, groupTitle, news}: NewsGroupProps
         >
           <MdArrowBackIosNew />
         </div>
-        
-        <div 
+
+        <div
           className="
             bg-white border rounded-full h-10 w-10 -right-6 z-10 absolute smartphone:right-0
             flex items-center justify-center shadow-3xl cursor-pointer hover:scale-110 transition
@@ -50,6 +50,6 @@ export function NewsCarouselGroup({ groupLink, groupTitle, news}: NewsGroupProps
           <MdArrowForwardIos />
         </div>
       </div>
-    </div>    
+    </div>
   );
 }

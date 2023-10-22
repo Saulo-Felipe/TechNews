@@ -5,6 +5,7 @@ import { UserLoading } from "@/components/Header/User/UserLoading";
 import { User } from "@/components/Header/User/User";
 import { CiCloudOn, CiSearch } from "react-icons/ci";
 import { RiMenu4Line } from "react-icons/ri";
+import Link from "next/link";
 
 
 export function Header() {
@@ -24,13 +25,15 @@ export function Header() {
 
       <section className="flex items-center justify-between px-desktop tablet:px-tablet smartphone:px-smartphone smartphone:gap-2">
         <div className="flex items-center gap-6 smartphone:gap-2">
-          <Image 
-            width={70} 
-            height={70} 
-            src={"/images/logotipo.png"} 
-            alt="logotipo da technews" 
-            className="smartphone:w-14"
-          />
+          <Link href={"/"}>
+            <Image 
+              width={70} 
+              height={70} 
+              src={"/images/logotipo.png"} 
+              alt="logotipo da technews" 
+              className="smartphone:w-14"
+            />
+          </Link>
 
           <Suspense fallback={<UserLoading />}>
             <User />
@@ -39,11 +42,11 @@ export function Header() {
 
         <div className="flex items-center gap-6 smartphone:gap-2 smartphone:flex-1">
           <nav className="flex gap-3 mobile:hidden">
-            <div>categoria 1</div>
-            <div>categoria 2</div>
-            <div>categoria 3</div>
-            <div>categoria 4</div>
-            <div>categoria 8</div>
+            <Link href={"/"}>categoria 1</Link>
+            <Link href={"/"}>categoria 2</Link>
+            <Link href={"/"}>categoria 3</Link>
+            <Link href={"/"}>categoria 4</Link>
+            <Link href={"/"}>categoria 5</Link>
           </nav>
 
           <div className="flex rounded-md transition bg-[#121212] smartphone:flex-1">

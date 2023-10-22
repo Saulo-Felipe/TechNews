@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BiSolidUser } from "react-icons/bi";
 
 export async function User() {
@@ -10,7 +11,7 @@ export async function User() {
         <BiSolidUser className="text-xl text-[#4C4C4C]" />
       </div>
 
-      <div>Entre / Cadastre-se</div> 
+      <Link href={"/auth/login"}>Entre / Cadastre-se</Link> 
     </div>
   );
 }
