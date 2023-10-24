@@ -8,6 +8,7 @@ export class NewsService {
 
   public async create(news: CreateNewsDto): Promise<CreateNewsDto> {
     const response = await this.prisma.news.create({ data: news });
+
     return response;
   }
 }

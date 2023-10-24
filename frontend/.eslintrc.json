@@ -1,4 +1,6 @@
 {
+  "files": ["*.ts", "*.tsx"],
+  "ignorePatterns": ["node_modules/", "build/"],
   "env": {
     "browser": true,
     "es2021": true

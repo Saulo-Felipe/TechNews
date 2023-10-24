@@ -1,4 +1,6 @@
 module.exports = {
+  // files: ['*.ts'],
+  // ignorePatterns: ["node_modules/", "build/"],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',

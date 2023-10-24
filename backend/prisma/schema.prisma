@@ -7,15 +7,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model News {
-  id         Int      @id @default(autoincrement())
-  title      String   @db.VarChar(255)
-  content    String   @db.VarChar
-  images_url String[]
-}
-
 model User {
   id    Int    @id @default(autoincrement())
   name  String @db.VarChar(255)
   email String @db.VarChar(255)
+
+  news News[]
+}
+
+model News {
+  id           Int      @id @default(autoincrement())
+  title        String   @db.VarChar(255)
+  content      String   @db.VarChar
+  images_url   String[]
+  content_type String   @db.VarChar(5) // html or json
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  categories Category[]
+  tags       Tag[]
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+
+  newsId Int  @unique
+  news   News @relation(fields: [newsId], references: [id])
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+
+  newsId Int  @unique
+  news   News @relation(fields: [newsId], references: [id])
 }
