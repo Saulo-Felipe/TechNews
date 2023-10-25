@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { NewsService } from "./news.service";
 import { CreateNewsDto } from "./dto/createNews.dto";
 
@@ -6,13 +6,8 @@ import { CreateNewsDto } from "./dto/createNews.dto";
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
-  @Get()
-  getOne(): string {
-    return "hello";
-  }
-
   @Post()
-  public async create(@Body(new ValidationPipe()) data: CreateNewsDto) {
-    return this.newsService.create(data);
+  public async create(@Body() data: CreateNewsDto) {
+    return await this.newsService.create(data);
   }
 }

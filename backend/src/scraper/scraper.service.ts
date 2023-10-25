@@ -7,71 +7,65 @@ import { DefaultResponse } from "src/types/GenericTypes";
 export class ScraperService {
   constructor(private prisma: PrismaService) {}
 
-  public async scrapeCNNBrasil(): Promise<string> {
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
+  public async updateCNNCategories(points: {
+    initial: string;
+    final: string;
+  }): Promise<DefaultResponse<{ name: string }[]>> {
+    const scrapedCategories = await this._scrapeCategories({ ...points });
 
-    await page.goto("https://www.cnnbrasil.com.br/");
+    if (scrapedCategories.error) {
+      return { error: scrapedCategories.error };
+    }
 
-    await browser.close();
+    const dbCategories: string[] = (
+      await this.prisma.category.findMany({ select: { name: true } })
+    ).map((item) => item.name.toLowerCase());
 
-    return "success";
-  }
+    // filter and format categories that are not in the database
+    const formatedData: { name: string }[] = scrapedCategories.data
+      .filter((category) => !dbCategories.includes(category.toLowerCase()))
+      .map((category) => ({ name: category }));
 
-  public async updateCNNCategories(
-    initialBreakpoint: string,
-    finalBreakpoint: string,
-  ): Promise<DefaultResponse<string[]>> {
-    const response = await this.scrapeCategory(
-      initialBreakpoint,
-      finalBreakpoint,
-    );
-
-    if (response.error) return { error: response.error };
-
-    const dbResponse = await this.prisma;
+    if (formatedData.length > 0) {
+      await this.prisma.category.createMany({ data: formatedData });
+    }
 
     return {
       success: "Categorias atualizadas com sucesso",
-      data: response.data,
+      data: formatedData,
     };
   }
 
-  private async scrapeCategory(
-    initialBreakpoint: string,
-    finalBreakpoint: string,
-  ): Promise<DefaultResponse<string[]>> {
+  private async _scrapeCategories(points: {
+    initial: string;
+    final: string;
+  }): Promise<DefaultResponse<string[]>> {
     try {
       const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
 
       await page.goto("https://www.cnnbrasil.com.br/");
 
-      const allCategories = await page.evaluate(
-        (initialBreakpoint, finalBreakpoint) => {
-          const categories = [
-            ...document.querySelectorAll(".menu__editorials li"),
-          ].map((e) => e.textContent.trim());
+      const allCategories = await page.evaluate((points) => {
+        const categories = [
+          ...document.querySelectorAll(".menu__editorials li"),
+        ].map((e) => e.textContent.trim());
 
-          const initialBreakpointIndex = categories.findIndex(
-            (item) => item.toLowerCase() === initialBreakpoint,
-          );
+        const initialPointIndex = categories.findIndex(
+          (item) => item.toLowerCase() === points.initial,
+        );
 
-          const finalBreakpointIndex = categories.findIndex(
-            (item) => item.toLowerCase() === finalBreakpoint,
-          );
+        const finalPointIndex = categories.findIndex(
+          (item) => item.toLowerCase() === points.final,
+        );
 
-          categories.splice(0, initialBreakpointIndex);
-          categories.splice(
-            finalBreakpointIndex,
-            categories.length - finalBreakpointIndex,
-          );
+        categories.splice(0, initialPointIndex);
+        categories.splice(finalPointIndex, categories.length - finalPointIndex);
 
-          return categories;
-        },
-        initialBreakpoint,
-        finalBreakpoint,
-      );
+        return categories;
+      }, points);
+
+      await browser.close();
 
       return { data: allCategories };
     } catch (error) {

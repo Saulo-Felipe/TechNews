@@ -6,9 +6,19 @@ import { User } from "@/components/Header/User/User";
 import { CiCloudOn, CiSearch } from "react-icons/ci";
 import { RiMenu4Line } from "react-icons/ri";
 import Link from "next/link";
+import { Category } from "@/types/GeneralTypes";
 
 
-export function Header() {
+export async function Header() {
+  const fetchResponse = await fetch(`${process.env["backend_url"]}/category/5`, {
+    method: "GET",
+    next: {
+      revalidate: 60 * 60 * 24 // 24 hours 
+    }
+  });
+  const categories: Category[] = await fetchResponse.json();
+
+
   return (
     <header className="bg-black text-white">
       <section className="px-desktop bg-[#121212] text-xs py-2 flex items-center justify-between tablet:px-tablet smartphone:px-smartphone">
@@ -42,11 +52,11 @@ export function Header() {
 
         <div className="flex items-center gap-6 smartphone:gap-2 smartphone:flex-1">
           <nav className="flex gap-3 mobile:hidden">
-            <Link href={"/"}>categoria 1</Link>
-            <Link href={"/"}>categoria 2</Link>
-            <Link href={"/"}>categoria 3</Link>
-            <Link href={"/"}>categoria 4</Link>
-            <Link href={"/"}>categoria 5</Link>
+            {
+              categories.map(({name, id}) => 
+                <Link key={id} href={`/category/${name}`}>{name}</Link>
+              )
+            }
           </nav>
 
           <div className="flex rounded-md transition bg-[#121212] smartphone:flex-1">

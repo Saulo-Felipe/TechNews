@@ -39,7 +39,6 @@ export default function NoteViewer() {
     console.log(a);
   }
 
-
   return (
     <EditorComposer>
       <>

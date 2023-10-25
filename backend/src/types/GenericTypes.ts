@@ -1,5 +1,5 @@
-export interface DefaultResponse<T> {
+export interface DefaultResponse<DataType> {
   error?: string;
   success?: string;
-  data?: T;
+  data?: DataType;
 }

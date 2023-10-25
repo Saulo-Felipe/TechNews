@@ -19,30 +19,42 @@ model News {
   id           Int      @id @default(autoincrement())
   title        String   @db.VarChar(255)
   content      String   @db.VarChar
-  images_url   String[]
+  images_url   String[] @db.VarChar
   content_type String   @db.VarChar(5) // html or json
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  // Relations
   userId Int  @unique
   user   User @relation(fields: [userId], references: [id])
 
-  categories Category[]
-  tags       Tag[]
+  categoryId Int      @unique
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: NoAction)
+
+  tags TagsOnNews[]
 }
 
 model Category {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(255)
 
-  newsId Int  @unique
-  news   News @relation(fields: [newsId], references: [id])
+  news News[]
 }
 
 model Tag {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(255)
 
+  news TagsOnNews[]
+}
+
+// many to many relations
+model TagsOnNews {
   newsId Int  @unique
-  news   News @relation(fields: [newsId], references: [id])
+  news   News @relation(fields: [newsId], references: [id], onDelete: NoAction)
+
+  tagId Int @unique
+  tag   Tag @relation(fields: [tagId], references: [id], onDelete: NoAction)
+
+  @@id([newsId, tagId])
 }

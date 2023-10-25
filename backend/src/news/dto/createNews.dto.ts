@@ -1,10 +1,14 @@
-import { ArrayMinSize, IsEnum, IsOptional, IsString, MinLength } from "class-validator";
+import {
+  ArrayMinSize,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MinLength,
+  IsInt,
+} from "class-validator";
 import { News } from "@prisma/client";
 
 export class CreateNewsDto implements News {
-  @IsOptional()
-  id: number;
-
   @MinLength(100)
   @IsString()
   content: string;
@@ -18,10 +22,19 @@ export class CreateNewsDto implements News {
 
   @IsEnum(["HTML", "JSON"])
   content_type: string;
-  
+
+  @IsInt()
+  userId: number;
+
+  @IsInt()
+  categoryId: number;
+
   @IsOptional()
   createdAt: Date;
 
   @IsOptional()
   updatedAt: Date;
+
+  @IsOptional()
+  id: number;
 }

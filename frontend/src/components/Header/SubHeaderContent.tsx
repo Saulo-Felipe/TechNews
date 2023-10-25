@@ -22,21 +22,25 @@ interface TemperatureResponse {
 
 export async function SubHeaderContent() {
   try {
-    console.time();
-    const ipifyResponse = await fetch("https://api64.ipify.org?format=json");
-    const {ip: userIp} = await ipifyResponse.json();
 
-    const ipinfoResponse = await fetch(`https://ipinfo.io/${userIp}?token=d7c2aa304b4e83`);
-    const userLocation: UserLocationResponse = await ipinfoResponse.json();
+    // await sleep();
 
-    const openMeteoResponse = await fetch("https://api.open-meteo.com/v1/forecast?" + new URLSearchParams({
-      latitude: userLocation.loc.split(",")[0],
-      longitude: userLocation.loc.split(",")[1],
-      current: "temperature"
-    }));
+    const {ip: userIp} = await (await fetch("https://api64.ipify.org?format=json")).json();
 
-    const temperature: TemperatureResponse = await openMeteoResponse.json();
-    console.timeEnd();
+    const resp = await fetch(process.env.backend_url+"/category/teste", {next: {revalidate: 10}});
+    console.log(resp);
+
+    const userLocation: UserLocationResponse = await (
+      await fetch(`https://ipinfo.io/${userIp}?token=d7c2aa304b4e83`)
+    ).json();
+
+    const temperature: TemperatureResponse = await (
+      await fetch("https://api.open-meteo.com/v1/forecast?" + new URLSearchParams({
+        latitude: userLocation.loc.split(",")[0],
+        longitude: userLocation.loc.split(",")[1],
+        current: "temperature"
+      }))
+    ).json();
 
     return (
       <>
