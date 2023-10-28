@@ -2,8 +2,7 @@ import { NewsCarouselGroup } from "@/components/NewsGroups/CarouselGroup";
 import { MainNews } from "./_components/MainNews/MainNews";
 import { News, NewsGroup } from "@/components/NewsGroups/SimpleGroup";
 
-export default function Home() {
-
+export default async function Home() {  
   const fakeNews: News[] = [
     {
       description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",

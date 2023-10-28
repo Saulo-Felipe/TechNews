@@ -1,10 +1,16 @@
 import { Injectable } from "@nestjs/common";
-import puppeteer from "puppeteer";
+import puppeteer, { Page } from "puppeteer";
 import { PrismaService } from "src/database/prisma.service";
-import { DefaultResponse } from "src/types/GenericTypes";
+import {
+  DefaultResponse,
+  ScrapeLatestNewsURL,
+  ScrapeOneNews,
+} from "src/types/GeneralTypes";
 
 @Injectable()
 export class ScraperService {
+  private page: Page;
+
   constructor(private prisma: PrismaService) {}
 
   public async updateCNNCategories(points: {
@@ -49,14 +55,14 @@ export class ScraperService {
       const allCategories = await page.evaluate((points) => {
         const categories = [
           ...document.querySelectorAll(".menu__editorials li"),
-        ].map((e) => e.textContent.trim());
+        ].map((e) => e.textContent?.trim());
 
         const initialPointIndex = categories.findIndex(
-          (item) => item.toLowerCase() === points.initial,
+          (item) => item?.toLowerCase() === points.initial,
         );
 
         const finalPointIndex = categories.findIndex(
-          (item) => item.toLowerCase() === points.final,
+          (item) => item?.toLowerCase() === points.final,
         );
 
         categories.splice(0, initialPointIndex);
@@ -71,6 +77,165 @@ export class ScraperService {
     } catch (error) {
       console.log(error);
       return { error: "Ocorreu um erro ao realizar o scrape" };
+    }
+  }
+
+  public async updateCNNNews() {
+    const browser = await puppeteer.launch({ headless: false });
+    this.page = await browser.newPage();
+
+    const latestNewsResponseURLs = await this._scrapeLatestNewsURL();
+    const lastDBNewsUrl = await this.prisma.news.findFirst({
+      orderBy: {
+        id: "desc",
+      },
+      select: {
+        url: true,
+      },
+    });
+
+    const filterUrls = latestNewsResponseURLs.map((i) => i.url);
+
+    if (lastDBNewsUrl !== null && filterUrls.includes(lastDBNewsUrl.url)) {
+      const index = filterUrls.findIndex((item) => item === lastDBNewsUrl.url);
+
+      latestNewsResponseURLs.splice(index, latestNewsResponseURLs.length);
+    }
+
+    const scrapedNews: ScrapeOneNews[] = [];
+
+    for (const newsUrl of latestNewsResponseURLs) {
+      this.page = await browser.newPage();
+      const oneNews = await this._scrapeOneNews(newsUrl.url);
+
+      if (oneNews.error) {
+        console.log("\nErro na noticia: ", newsUrl);
+      } else {
+        await this.prisma.news.create({
+          data: {
+            images_url: [],
+            title: oneNews.data.title,
+            content: oneNews.data.content,
+            excerpt: oneNews.data.excerpt,
+            content_type: "HTML",
+            originalContent: "CNN",
+            url: newsUrl.url,
+            cover_image_url: newsUrl.coverImageUrl,
+            user: {
+              connectOrCreate: {
+                where: {
+                  username: oneNews.data.author,
+                },
+                create: {
+                  username: oneNews.data.author,
+                },
+              },
+            },
+            category: {
+              connectOrCreate: {
+                where: {
+                  name: oneNews.data.category,
+                },
+                create: {
+                  name: oneNews.data.category,
+                },
+              },
+            },
+            tags: {
+              connectOrCreate: oneNews.data.tags.map((tagName) => ({
+                where: {
+                  name: tagName,
+                },
+                create: {
+                  name: tagName,
+                },
+              })),
+            },
+          },
+        });
+        scrapedNews.push(oneNews.data);
+      }
+      await this.page.close();
+    }
+
+    await browser.close();
+
+    return scrapedNews;
+  }
+
+  private async _scrapeLatestNewsURL(): Promise<ScrapeLatestNewsURL[]> {
+    await this.page.goto("https://www.cnnbrasil.com.br/ultimas-noticias");
+
+    const evaluateAllUrlResponse: ScrapeLatestNewsURL[] =
+      await this.page.evaluate(() => {
+        const allNewsCards = [
+          ...document.querySelectorAll<HTMLLinkElement>(
+            ".home__list__item > a",
+          ),
+        ].map((linkElement) => ({
+          url: linkElement.href,
+          coverImageUrl: linkElement.querySelector("img").src,
+        }));
+
+        return allNewsCards;
+      });
+
+    return evaluateAllUrlResponse;
+  }
+
+  private async _scrapeOneNews(
+    url: string,
+  ): Promise<DefaultResponse<ScrapeOneNews>> {
+    try {
+      await this.page.goto(url);
+
+      const response: ScrapeOneNews = await this.page.evaluate(() => {
+        const permittedTags = ["P", "IMG", "H1", "H2", "H3", "H4", "FIGURE"];
+        const postContent = document.querySelector(".post__content");
+
+        const tags = [
+          ...document.querySelectorAll<HTMLLIElement>(".tags__list li"),
+        ].map((item) => item.innerText);
+
+        [...postContent.childNodes].forEach((element) => {
+          if (!permittedTags.includes(element.nodeName)) {
+            element.remove();
+          }
+        }); // clear html content
+
+        const content = postContent.innerHTML;
+
+        const title = document
+          .querySelector(".post__header > .post__title")
+          .textContent.trim();
+
+        const excerpt = document
+          .querySelector(".post__header > .post__excerpt")
+          .textContent.trim();
+
+        const author = document
+          .querySelector(".post__header .author__name a")
+          .textContent.trim();
+
+        const publicationDate = document
+          .querySelector(".post__header .post__data")
+          .textContent.trim();
+
+        return {
+          content,
+          title,
+          excerpt,
+          author,
+          publicationDate,
+          tags,
+          category: window.location.href.split("/")[3],
+        };
+      });
+
+      return { success: "Bem sucessido", data: response };
+    } catch (e) {
+      console.log(e);
+      return { error: "Não foi posssível acessar essa notícica" };
     }
   }
 }

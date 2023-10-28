@@ -22,16 +22,10 @@ interface TemperatureResponse {
 
 export async function SubHeaderContent() {
   try {
-
-    // await sleep();
-
-    const {ip: userIp} = await (await fetch("https://api64.ipify.org?format=json")).json();
-
-    const resp = await fetch(process.env.backend_url+"/category/teste", {next: {revalidate: 10}});
-    console.log(resp);
+    const {ip: userIp} = await (await fetch("https://api64.ipify.org?format=json", {cache: "no-store"})).json();
 
     const userLocation: UserLocationResponse = await (
-      await fetch(`https://ipinfo.io/${userIp}?token=d7c2aa304b4e83`)
+      await fetch(`https://ipinfo.io/${userIp}?token=d7c2aa304b4e83`, {cache: "no-store"})
     ).json();
 
     const temperature: TemperatureResponse = await (
@@ -39,7 +33,7 @@ export async function SubHeaderContent() {
         latitude: userLocation.loc.split(",")[0],
         longitude: userLocation.loc.split(",")[1],
         current: "temperature"
-      }))
+      }), {cache: "no-store"})
     ).json();
 
     return (

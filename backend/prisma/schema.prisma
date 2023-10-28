@@ -8,53 +8,46 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  name  String @db.VarChar(255)
-  email String @db.VarChar(255)
+  id       Int     @id @default(autoincrement())
+  username String  @unique @db.VarChar(255)
+  email    String? @db.VarChar(255)
 
   news News[]
 }
 
 model News {
-  id           Int      @id @default(autoincrement())
-  title        String   @db.VarChar(255)
-  content      String   @db.VarChar
-  images_url   String[] @db.VarChar
-  content_type String   @db.VarChar(5) // html or json
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(255)
+  content         String   @db.VarChar
+  cover_image_url String   @db.VarChar(600)
+  images_url      String[] @db.VarChar
+  content_type    String   @db.VarChar(5) // html or json
+  url             String   @db.VarChar(600)
+  excerpt         String   @db.VarChar(600)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  originalContent String   @db.VarChar(10) // CNN or TechNews
 
   // Relations
-  userId Int  @unique
+  userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  categoryId Int      @unique
+  categoryId Int
   category   Category @relation(fields: [categoryId], references: [id], onDelete: NoAction)
 
-  tags TagsOnNews[]
+  tags Tag[]
 }
 
 model Category {
   id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
+  name String @unique @db.VarChar(255)
 
   news News[]
 }
 
 model Tag {
   id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
+  name String @unique @db.VarChar(255)
 
-  news TagsOnNews[]
-}
-
-// many to many relations
-model TagsOnNews {
-  newsId Int  @unique
-  news   News @relation(fields: [newsId], references: [id], onDelete: NoAction)
-
-  tagId Int @unique
-  tag   Tag @relation(fields: [tagId], references: [id], onDelete: NoAction)
-
-  @@id([newsId, tagId])
+  news News[]
 }

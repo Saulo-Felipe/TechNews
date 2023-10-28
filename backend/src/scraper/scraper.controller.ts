@@ -6,12 +6,19 @@ import { Cron, CronExpression } from "@nestjs/schedule";
 export class ScraperContoller {
   constructor(private readonly scraperService: ScraperService) {}
 
-  @Cron(CronExpression.EVERY_10_MINUTES)
+  @Cron(CronExpression.EVERY_WEEK)
   @Get("update-categories")
-  async updateCategories() {
+  public async updateCategories() {
     const points = { initial: "esportes", final: "lifestyle" };
 
     const response = await this.scraperService.updateCNNCategories(points);
+
+    return response;
+  }
+
+  @Get("update-news")
+  public async updateNews() {
+    const response = await this.scraperService.updateCNNNews();
 
     return response;
   }

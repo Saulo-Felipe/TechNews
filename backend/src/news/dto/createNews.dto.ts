@@ -17,8 +17,23 @@ export class CreateNewsDto implements News {
   @IsString()
   title: string;
 
+  @MinLength(10)
+  @IsString()
+  url: string;
+
+  @MinLength(25)
+  @IsString()
+  excerpt: string;
+
   @ArrayMinSize(1)
   images_url: string[];
+
+  @MinLength(25)
+  @IsString()
+  cover_image_url: string;
+
+  @IsEnum(["CNN", "TechNews"])
+  originalContent: string;
 
   @IsEnum(["HTML", "JSON"])
   content_type: string;
