@@ -1,35 +1,21 @@
 import { NewsCarouselGroup } from "@/components/NewsGroups/CarouselGroup";
 import { MainNews } from "./_components/MainNews/MainNews";
-import { News, NewsGroup } from "@/components/NewsGroups/SimpleGroup";
+import { NewsGroup } from "@/components/NewsGroups/SimpleGroup";
+import { News } from "@/types/GeneralTypes";
 
 export default async function Home() {  
-  const fakeNews: News[] = [
-    {
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-      id: 21,
-      imageUrl: "/images/example-3.jpg",
-      title: "Cachorro em new york, mito ou fake?",
-    },
-    {
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-      id: 22,
-      imageUrl: "/images/example-2.jpeg",
-      title: "Porque as borboletas estão desaparecendo ao redor do planeta?",
-    },
-    {
-      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-      id: 23,
-      imageUrl: "/images/example-1.webp",
-      title: "Porque as borboletas estão desaparecendo ao redor do planeta?",
-    }
-  ];
+  const latestNewsFetch = await fetch(`${process.env["backend_url"]}/news/random?limit=4`, {cache: "no-cache"});
+  const latestNewsData: News[] = await latestNewsFetch.json();
+
+  const newsRankingFetch = await fetch(`${process.env["backend_url"]}/news/most-accessed`, {cache: "no-cache"});
+  const newsRankingData: News[] = await newsRankingFetch.json();
 
   return (
     <div className="px-desktop pb-32 tablet:px-tablet smartphone:px-smartphone">
       <MainNews />
 
-      <NewsGroup groupLink="#" groupTitle="Últimas Notícias" news={fakeNews} />
-      <NewsCarouselGroup groupLink="#" groupTitle="Mais Acessadas" news={[...fakeNews, ...fakeNews, ...fakeNews]} />
+      <NewsGroup groupLink="#" groupTitle="Últimas Notícias" news={latestNewsData} />
+      <NewsCarouselGroup groupLink="#" groupTitle="Mais Acessadas" news={newsRankingData} />
     </div>
   );
 }

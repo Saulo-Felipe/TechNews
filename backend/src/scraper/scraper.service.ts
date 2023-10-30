@@ -113,6 +113,7 @@ export class ScraperService {
       } else {
         await this.prisma.news.create({
           data: {
+            views: 0,
             images_url: [],
             title: oneNews.data.title,
             content: oneNews.data.content,

@@ -25,7 +25,15 @@ export function NewsCarouselGroup({ groupLink, groupTitle, news}: NewsGroupProps
         <div className="overflow-hidden scroll-smooth" ref={carouselRef}>
           <div className="w-max flex gap-2">
             {
-              news.map((item, i) => <NewsCard rankingPosition={i} width="w-72" key={i} {...item} />)
+              news.map((item, i) => 
+                <NewsCard 
+                  rankingPosition={i} 
+                  width="w-72" 
+                  key={i} 
+                  imageUrl={item.cover_image_url} 
+                  {...item} 
+                />
+              )
             }
           </div>
         </div>

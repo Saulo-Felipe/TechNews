@@ -44,6 +44,9 @@ export class CreateNewsDto implements News {
   @IsInt()
   categoryId: number;
 
+  @IsInt()
+  views: number;
+
   @IsOptional()
   createdAt: Date;
 

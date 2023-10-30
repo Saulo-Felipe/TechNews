@@ -27,6 +27,7 @@ model News {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
   originalContent String   @db.VarChar(10) // CNN or TechNews
+  views           Int      @db.Integer
 
   // Relations
   userId Int
