@@ -6,9 +6,9 @@ import { Category } from "@prisma/client";
 export class CategoryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async get(amount: number): Promise<Category[]> {
+  public async get(limit: number): Promise<Category[]> {
     const dbCategories = await this.prisma.category.findMany({
-      take: amount,
+      take: limit,
     });
 
     return dbCategories;

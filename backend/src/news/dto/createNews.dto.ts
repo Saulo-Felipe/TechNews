@@ -41,6 +41,10 @@ export class CreateNewsDto implements News {
   @IsInt()
   userId: number;
 
+  @IsString()
+  @MinLength(5)
+  publicationDate: string;
+
   @IsInt()
   categoryId: number;
 

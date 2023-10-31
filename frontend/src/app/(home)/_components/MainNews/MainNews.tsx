@@ -1,15 +1,19 @@
 import { News } from "@/types/GeneralTypes";
 import { Card } from "./Card";
+import { twMerge } from "tailwind-merge";
 
 
 export async function MainNews() {
   const response = await fetch(`${process.env["backend_url"]}/news/random?limit=3`);
   const allNews: News[] = await response.json();
 
-
   return (
-    <div className="mt-10 flex gap-2 h-[70vh] smartphone:flex-col">
-
+    <div className={
+      twMerge(
+        "mt-10 flex gap-2 h-[70vh] smartphone:flex-col", 
+        allNews.length === 0 ? "animate-pulse" : ""
+      )}
+    >
       <Card 
         cardPadding="p-8"
         imageURL={allNews[0]?.cover_image_url.split("w=")[0]}

@@ -2,51 +2,75 @@ import { Injectable } from "@nestjs/common";
 import { CreateNewsDto } from "./dto/createNews.dto";
 import { PrismaService } from "src/database/prisma.service";
 import { News } from "@prisma/client";
+import { NewsPreview } from "src/types/GeneralTypes";
 
 @Injectable()
 export class NewsService {
   constructor(private prisma: PrismaService) {}
 
-  public async create(news: CreateNewsDto): Promise<News> {
-    const response = await this.prisma.news.create({ data: news });
+  public async createOne(news: CreateNewsDto): Promise<News> {
+    const createdNews = await this.prisma.news.create({ data: news });
 
-    return response;
+    return createdNews;
   }
 
-  public async get(limit?: number): Promise<News[]> {
+  public async getMany(limit: number = 10): Promise<News[]> {
     const response = await this.prisma.news.findMany({
-      take: limit ? limit : 10,
+      take: limit,
     });
 
     return response;
   }
 
-  public async getRandom(limit?: number) {
+  public async getManyRandomPreview(
+    limit: number = 10,
+  ): Promise<NewsPreview[]> {
     const totalNewsCount = await this.prisma.news.count();
-    const randomValue = Math.floor(
-      Math.random() * (totalNewsCount - limit - 1),
-    );
+
+    const randomValue = Math.floor(Math.random() * (totalNewsCount - limit));
+
     const randomNews = await this.prisma.news.findMany({
+      select: {
+        title: true,
+        id: true,
+        excerpt: true,
+        cover_image_url: true,
+      },
       take: limit,
-      skip: randomValue,
+      skip: randomValue < 0 ? 0 : randomValue, // does not accept negative values
     });
 
     return randomNews;
   }
 
-  public async getMostAccessed(): Promise<News[]> {
+  public async getMostAccessedPreview(): Promise<NewsPreview[]> {
     return await this.prisma.news.findMany({
       take: 10,
       orderBy: { views: "asc" },
+      select: {
+        title: true,
+        id: true,
+        excerpt: true,
+        cover_image_url: true,
+      },
     });
   }
 
-  public async gets(offset: number): Promise<News[]> {
-    const response = await this.prisma.news.findMany({
-      skip: offset * 4,
-      take: 4,
+  public async getOne(id: number): Promise<News> {
+    const news = await this.prisma.news.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+        tags: true,
+      },
     });
 
-    return response;
+    return news;
   }
 }

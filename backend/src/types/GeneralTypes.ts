@@ -25,3 +25,16 @@ export interface ScrapeLatestNewsURL {
   url: string;
   coverImageUrl: string;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  email: string | null;
+}
+
+export interface NewsPreview {
+  title: string;
+  id: number;
+  excerpt: string;
+  cover_image_url: string;
+}

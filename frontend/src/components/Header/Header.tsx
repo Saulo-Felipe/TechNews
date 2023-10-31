@@ -10,7 +10,7 @@ import { Category } from "@/types/GeneralTypes";
 
 
 export async function Header() {
-  const fetchResponse = await fetch(`${process.env["backend_url"]}/category/5`, {
+  const fetchResponse = await fetch(`${process.env["backend_url"]}/category?limit=5`, {
     method: "GET",
     next: {
       revalidate: 60 * 60 * 24 // 24 hours 

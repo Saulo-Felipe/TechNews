@@ -1,4 +1,4 @@
-import { Get, Controller, Param } from "@nestjs/common";
+import { Get, Controller, Query } from "@nestjs/common";
 import { CategoryService } from "./category.service";
 import { GetCategoriesDto } from "./dto/getCategories.dto";
 
@@ -13,9 +13,9 @@ export class CategoryController {
     );
   }
 
-  @Get(":amount")
-  public async get(@Param() params: GetCategoriesDto) {
+  @Get()
+  public async get(@Query() params: GetCategoriesDto) {
     console.log("[GET]: categories");
-    return await this.categoryService.get(params.amount);
+    return await this.categoryService.get(params.limit);
   }
 }

@@ -1,7 +1,17 @@
-import { IsInt, IsOptional } from "class-validator";
+import { IsEnum, IsInt, IsOptional } from "class-validator";
 
-export class GetNewsDto {
+export class GetLimitQueryDto {
   @IsOptional()
   @IsInt()
   limit: number;
+}
+
+export class QueryPreviewTypeDto {
+  @IsEnum(["random", "latest", "most-accessed"])
+  type: "random" | "latest" | "most-accessed";
+}
+
+export class GetOneNewsDto {
+  @IsInt()
+  id: number;
 }

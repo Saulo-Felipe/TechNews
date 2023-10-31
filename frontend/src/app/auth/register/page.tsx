@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 
-export default function Register() {
+export default function RegisterPage() {
 
   return (
     <div className="min-h-[100vh] flex justify-center">

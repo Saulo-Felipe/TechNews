@@ -33,7 +33,7 @@ function MyCustom({editorRef}: {editorRef: MutableRefObject<LexicalEditor | null
 }
 
 
-export default function NoteViewer() {
+export default function CreateNewsPage() {
   const editorRef = useRef<LexicalEditor>(null);
   function handleChange(a: string) {
     console.log(a);

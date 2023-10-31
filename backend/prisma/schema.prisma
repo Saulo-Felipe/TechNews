@@ -28,6 +28,7 @@ model News {
   updatedAt       DateTime @updatedAt
   originalContent String   @db.VarChar(10) // CNN or TechNews
   views           Int      @db.Integer
+  publicationDate String?  @db.VarChar(100)
 
   // Relations
   userId Int

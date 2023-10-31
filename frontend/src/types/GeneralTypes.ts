@@ -15,4 +15,22 @@ export interface News {
   createdAt: Date;
   updatedAt: Date;
   originalContent: "CNN" | "TechNews";
+  publicationDate: string;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  email: string | null;
+}
+
+
+export interface Tag {
+  id: number;
+  name: string;
+}
+
+export interface NewsWithUserAndTag extends News {
+  user: User;
+  tags: Tag[];
 }

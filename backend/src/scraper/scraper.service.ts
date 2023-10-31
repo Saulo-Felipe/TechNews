@@ -118,6 +118,7 @@ export class ScraperService {
             title: oneNews.data.title,
             content: oneNews.data.content,
             excerpt: oneNews.data.excerpt,
+            publicationDate: oneNews.data.publicationDate,
             content_type: "HTML",
             originalContent: "CNN",
             url: newsUrl.url,
@@ -191,7 +192,16 @@ export class ScraperService {
       await this.page.goto(url);
 
       const response: ScrapeOneNews = await this.page.evaluate(() => {
-        const permittedTags = ["P", "IMG", "H1", "H2", "H3", "H4", "FIGURE"];
+        const permittedTags = [
+          "P",
+          "IMG",
+          "H1",
+          "H2",
+          "H3",
+          "H4",
+          "FIGURE",
+          "UL",
+        ];
         const postContent = document.querySelector(".post__content");
 
         const tags = [
@@ -206,21 +216,21 @@ export class ScraperService {
 
         const content = postContent.innerHTML;
 
-        const title = document
-          .querySelector(".post__header > .post__title")
-          .textContent.trim();
+        const title = document.querySelector<HTMLElement>(
+          ".post__header > .post__title",
+        ).innerText;
 
-        const excerpt = document
-          .querySelector(".post__header > .post__excerpt")
-          .textContent.trim();
+        const excerpt = document.querySelector<HTMLElement>(
+          ".post__header > .post__excerpt",
+        ).innerText;
 
-        const author = document
-          .querySelector(".post__header .author__name a")
-          .textContent.trim();
+        const author = document.querySelector<HTMLLinkElement>(
+          ".post__header .author__name",
+        ).innerText;
 
-        const publicationDate = document
-          .querySelector(".post__header .post__data")
-          .textContent.trim();
+        const publicationDate = document.querySelector<HTMLElement>(
+          ".post__header .post__data",
+        ).innerText;
 
         return {
           content,

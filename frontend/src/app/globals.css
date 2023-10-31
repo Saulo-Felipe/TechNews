@@ -12,6 +12,22 @@
   a:hover {
     @apply text-default-red;
   }
+
+  p {
+    @apply py-2;
+  }
+
+  #news-content p > a {
+    @apply text-default-red;
+  }
+
+  p > a:hover {
+    @apply underline
+  }
+
+  #news-content h2 {
+    @apply text-2xl font-bold mt-2;
+  }
 }
 
 .toolbar {

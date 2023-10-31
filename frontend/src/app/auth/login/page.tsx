@@ -5,7 +5,7 @@ import { AiOutlineLogin } from "react-icons/ai";
 import Image from "next/image";
 import { Input } from "@/components/Input";
 
-export default function Login() {
+export default function LoginPage() {
 
   
   return (
