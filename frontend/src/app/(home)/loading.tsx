@@ -1,4 +1,8 @@
 export default function Loading() {
 
-  return "Loading...";
+  return (
+    <div className="">
+        sasas
+    </div>
+  );
 }

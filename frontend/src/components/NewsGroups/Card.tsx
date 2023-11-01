@@ -8,9 +8,10 @@ interface CardProps {
   excerpt: string;
   id: number;
 
-  height?: string;
-  width?: string;
+  loading?: boolean;
   description?: string;
+  height?: string,
+  width?: string,
   rankingPosition?: number;
 }
 
@@ -23,12 +24,16 @@ export function NewsCard({
   height="h-40", 
   width="w-1/3",
   id,
-  excerpt
+  excerpt, 
+  loading
 }: CardProps) {
 
   return (
-    <div className={`${width} group cursor-pointer border border-transparent`}>
-      <Link href={`/news/${id}`}>
+    <div 
+      className={`${width} ${loading ? "bg-slate-300 animate-pulse" : ""} group cursor-pointer 
+      border border-transparent`}
+    >
+      <Link href={loading ? "#" : `/news/${id}`}>
         <div className="overflow-hidden relative">
           {typeof rankingPosition !== "undefined" && ( 
             <span className="bg-default-red text-white absolute z-10 right-0 top-0 

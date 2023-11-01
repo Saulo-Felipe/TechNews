@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CreateNewsDto } from "./dto/createNews.dto";
 import { PrismaService } from "src/database/prisma.service";
 import { News } from "@prisma/client";
-import { NewsPreview } from "src/types/GeneralTypes";
+import { DefaultResponse, NewsPreview } from "src/types/GeneralTypes";
 
 @Injectable()
 export class NewsService {
@@ -14,9 +14,36 @@ export class NewsService {
     return createdNews;
   }
 
-  public async getMany(limit: number = 10): Promise<News[]> {
+  public async addView(newsId: number): Promise<DefaultResponse<void>> {
+    try {
+      await this.prisma.news.update({
+        where: {
+          id: newsId,
+        },
+        data: {
+          views: {
+            increment: 1,
+          },
+        },
+      });
+
+      return { success: "View adicionada com sucesso" };
+    } catch (e) {
+      return { error: "Notícia não encontrada" };
+    }
+  }
+
+  public async getManyLatestPreview(
+    limit: number = 10,
+  ): Promise<NewsPreview[]> {
     const response = await this.prisma.news.findMany({
       take: limit,
+      select: {
+        title: true,
+        id: true,
+        excerpt: true,
+        cover_image_url: true,
+      },
     });
 
     return response;
@@ -25,6 +52,7 @@ export class NewsService {
   public async getManyRandomPreview(
     limit: number = 10,
   ): Promise<NewsPreview[]> {
+    console.log("entrei");
     const totalNewsCount = await this.prisma.news.count();
 
     const randomValue = Math.floor(Math.random() * (totalNewsCount - limit));
@@ -46,8 +74,9 @@ export class NewsService {
   public async getMostAccessedPreview(): Promise<NewsPreview[]> {
     return await this.prisma.news.findMany({
       take: 10,
-      orderBy: { views: "asc" },
+      orderBy: { views: "desc" },
       select: {
+        views: true,
         title: true,
         id: true,
         excerpt: true,
@@ -56,10 +85,10 @@ export class NewsService {
     });
   }
 
-  public async getOne(id: number): Promise<News> {
+  public async getOne(newsId: number): Promise<News> {
     const news = await this.prisma.news.findUnique({
       where: {
-        id,
+        id: newsId,
       },
       include: {
         user: {

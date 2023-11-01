@@ -11,7 +11,7 @@ export class QueryPreviewTypeDto {
   type: "random" | "latest" | "most-accessed";
 }
 
-export class GetOneNewsDto {
+export class NewsIdParam {
   @IsInt()
-  id: number;
+  newsId: number;
 }

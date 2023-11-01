@@ -1,3 +1,4 @@
+import { NewsCarouselGroup } from "@/components/NewsGroups/Carousel/CarouselGroup";
 import { MainNews } from "./_components/MainNews/MainNews";
 import { SimpleNewsGroup } from "@/components/NewsGroups/SimpleGroup";
 
@@ -8,7 +9,7 @@ export default function HomePage() {
       <MainNews />
 
       <SimpleNewsGroup groupTitle="Últimas Notícias" type="random" />
-      {/* <NewsCarouselGroup groupTitle="Mais Acessadas" type="random" /> */}
+      <NewsCarouselGroup groupTitle="Mais Acessadas" type="most-accessed" />
     </div>
   );
 }

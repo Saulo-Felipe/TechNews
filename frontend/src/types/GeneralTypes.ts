@@ -34,3 +34,10 @@ export interface NewsWithUserAndTag extends News {
   user: User;
   tags: Tag[];
 }
+
+export interface NewsPreview {
+  title: string;
+  id: number;
+  excerpt: string;
+  cover_image_url: string;
+}

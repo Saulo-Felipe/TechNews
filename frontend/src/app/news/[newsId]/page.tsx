@@ -2,12 +2,15 @@ import { NewsWithUserAndTag } from "@/types/GeneralTypes";
 import htmlParser from "html-react-parser";
 
 
-
 export default async function NewsPage({ params }: {params: { newsId: number }}) {
-  const newsFetch = await fetch(`${process.env["backend_url"]}/news/get-one/${params.newsId}`, 
-    { cache: "no-cache"}
-  );
+  const newsFetch = await fetch(`${process.env["backend_url"]}/news/get-one/${params.newsId}`);
   const newsData: NewsWithUserAndTag = await newsFetch.json();
+
+  // Add view
+  await fetch(`${process.env["backend_url"]}/news/add-view/${params.newsId}`, {
+    method: "POST",
+    cache: "reload"
+  });
 
   return (
     <div className="bg-white py-14 px-72 text-xl text-neutral-700">

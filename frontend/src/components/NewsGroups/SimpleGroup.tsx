@@ -1,17 +1,24 @@
-import { NewsWithUserAndTag } from "@/types/GeneralTypes";
+import { NewsPreview } from "@/types/GeneralTypes";
 import { NewsCard } from "./Card";
 import { Title } from "./Title";
+import { Suspense } from "react";
 
 export interface NewsGroupProps {
-  type: "random" | "latest";
+  type: "random" | "latest" | "most-accessed";
   groupTitle: string;
 }
 
-export async function SimpleNewsGroup({ type, groupTitle }: NewsGroupProps) {
-  const fetchNews = await fetch(`${process.env["backend_url"]}/news/preview/${type}?limit=4`);
-  const newsData: NewsWithUserAndTag[] = await fetchNews.json();
+async function SimpleNewsGroup({ type, groupTitle }: NewsGroupProps) {
+  const fetchNews = await fetch(`${process.env["backend_url"]}/news/preview/${type}?limit=4`, {
+    method: "GET",
+    next: {
+      revalidate: 60 * 10 // 10 minutes
+    }
+  });
+  const newsData: NewsPreview[] = await fetchNews.json();
 
-  console.log(newsData);
+  await new Promise(resolve => setTimeout(resolve, 30000));
+
 
   return (
     <div className="pt-10 flex flex-col gap-4">
@@ -38,3 +45,34 @@ export async function SimpleNewsGroup({ type, groupTitle }: NewsGroupProps) {
     </div>
   );
 }
+
+
+//--------------------> Loading version
+async function LoadingSimpleNewsGroup(params: NewsGroupProps) {
+
+  return (
+    <Suspense fallback={
+      <div className="pt-10 flex flex-col gap-4">
+        <Title title={""} link={"#"} loading />
+
+        <div className="flex items-start gap-4 smartphone:flex-col smartphone:gap-6">
+          {
+            new Array(4).fill(1).map((_, i) => 
+              <NewsCard 
+                loading
+                key={i} 
+                width="w-full" 
+                imageUrl={""} excerpt="" id={i} title="" // unused attributes
+              />
+            )
+          }
+        </div>  
+      </div>
+    }>
+      <SimpleNewsGroup {...params} />
+    </Suspense>
+  );
+}
+
+
+export { LoadingSimpleNewsGroup as SimpleNewsGroup };
