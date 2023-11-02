@@ -1,3 +1,4 @@
+import { NewsCarouselGroup } from "@/components/NewsGroups/Carousel/CarouselGroup";
 import { NewsWithUserAndTag } from "@/types/GeneralTypes";
 import htmlParser from "html-react-parser";
 
@@ -48,6 +49,12 @@ export default async function NewsPage({ params }: {params: { newsId: number }})
           }
         </div>
       </div>
+      
+      <NewsCarouselGroup 
+        groupTitle="Notícias Relacionadas" 
+        type="related-tags" 
+        tags={newsData.tags.map(e => e.name)} 
+      />
     </div>
   );
 }

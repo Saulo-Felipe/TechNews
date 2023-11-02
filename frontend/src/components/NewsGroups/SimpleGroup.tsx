@@ -4,8 +4,11 @@ import { Title } from "./Title";
 import { Suspense } from "react";
 
 export interface NewsGroupProps {
-  type: "random" | "latest" | "most-accessed";
+  type: "random" | "latest" | "most-accessed" | "related-tags";
   groupTitle: string;
+
+  tags?: string[];
+  ranking?: boolean;
 }
 
 async function SimpleNewsGroup({ type, groupTitle }: NewsGroupProps) {
@@ -16,9 +19,6 @@ async function SimpleNewsGroup({ type, groupTitle }: NewsGroupProps) {
     }
   });
   const newsData: NewsPreview[] = await fetchNews.json();
-
-  await new Promise(resolve => setTimeout(resolve, 30000));
-
 
   return (
     <div className="pt-10 flex flex-col gap-4">

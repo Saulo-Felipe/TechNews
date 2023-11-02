@@ -8,8 +8,16 @@ export default function HomePage() {
     <div className="px-desktop min-h-[100vh] pb-32 tablet:px-tablet smartphone:px-smartphone">
       <MainNews />
 
-      <SimpleNewsGroup groupTitle="Últimas Notícias" type="random" />
-      <NewsCarouselGroup groupTitle="Mais Acessadas" type="most-accessed" />
+      <SimpleNewsGroup 
+        groupTitle="Últimas Notícias" 
+        type="random" 
+      />
+
+      <NewsCarouselGroup 
+        ranking 
+        groupTitle="Mais Acessadas" 
+        type="most-accessed" 
+      />
     </div>
   );
 }

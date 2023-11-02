@@ -1,14 +1,21 @@
-import { IsEnum, IsInt, IsOptional } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsArray, IsEnum, IsInt, IsOptional, IsString } from "class-validator";
 
-export class GetLimitQueryDto {
+export class GetPreviewQueryDto {
   @IsOptional()
   @IsInt()
   limit: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @Transform(({ value }) => value.split(","))
+  tags: string[];
 }
 
 export class QueryPreviewTypeDto {
-  @IsEnum(["random", "latest", "most-accessed"])
-  type: "random" | "latest" | "most-accessed";
+  @IsEnum(["random", "latest", "most-accessed", "related-tags"])
+  type: "random" | "latest" | "most-accessed" | "related-tags";
 }
 
 export class NewsIdParam {

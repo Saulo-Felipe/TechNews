@@ -6,13 +6,16 @@ import { CarouselControl } from "./CarouselControl";
 import { Suspense } from "react";
 
 
-async function NewsCarouselGroup({ groupTitle, type }: NewsGroupProps) {
-  const fetchNews = await fetch(`${process.env["backend_url"]}/news/preview/${type}`, {
-    method: "GET",
-    next: {
-      revalidate: 60 * 10 // 10 minutes
-    }
-  });
+async function NewsCarouselGroup({ groupTitle, type, tags, ranking }: NewsGroupProps) {
+  if (type === "related-tags") {
+    type += "?tags=";
+    tags?.forEach(tag => type += `${tag},`); // format: tag1,tag2,tag3...
+  }
+  
+  console.log(type);
+
+  const fetchNews = await fetch(`${process.env["backend_url"]}/news/preview/${type}`);
+    
   const newsData: NewsPreview[] = await fetchNews.json();
 
   return (
@@ -27,7 +30,7 @@ async function NewsCarouselGroup({ groupTitle, type }: NewsGroupProps) {
                 {
                   newsData.map((item, i) => 
                     <NewsCard 
-                      rankingPosition={i+1} 
+                      rankingPosition={ranking ? i+1 : undefined} 
                       width="w-72" 
                       key={i} 
                       imageUrl={item.cover_image_url} 

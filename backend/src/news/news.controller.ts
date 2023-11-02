@@ -11,7 +11,7 @@ import {
 import { NewsService } from "./news.service";
 import { CreateNewsDto } from "./dto/createNews.dto";
 import {
-  GetLimitQueryDto,
+  GetPreviewQueryDto,
   NewsIdParam,
   QueryPreviewTypeDto,
 } from "./dto/getNews.dto";
@@ -57,19 +57,18 @@ export class NewsController {
 
   @Get("preview/:type")
   public async getRandom(
-    @Query() { limit }: GetLimitQueryDto,
+    @Query() { limit, tags }: GetPreviewQueryDto,
     @Param() { type }: QueryPreviewTypeDto,
   ) {
     const keyValue = {
-      random: this.newsService.getManyRandomPreview.bind(this.newsService),
-      "most-accessed": this.newsService.getMostAccessedPreview.bind(
-        this.newsService,
-      ),
-      latest: this.newsService.getManyLatestPreview.bind(this.newsService),
+      random: () => this.newsService.getManyRandomPreview(limit),
+      "most-accessed": () => this.newsService.getMostAccessedPreview(),
+      latest: () => this.newsService.getManyLatestPreview(limit),
+      "related-tags": () => this.newsService.getNewsBasedOnTags(tags, limit),
     };
 
-    const response = await keyValue[type](limit);
+    console.log("---------------------reicebved;: ", tags);
 
-    return response;
+    return await keyValue[type]();
   }
 }

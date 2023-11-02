@@ -102,4 +102,33 @@ export class NewsService {
 
     return news;
   }
+
+  public async getNewsBasedOnTags(tags: string[], limit: number = 10) {
+    const news = await this.prisma.news.findMany({
+      where: {
+        OR: tags
+          .filter((tag) => tag !== "")
+          .map((tag) => ({
+            tags: {
+              some: {
+                name: {
+                  contains: tag,
+                  mode: "insensitive",
+                },
+              },
+            },
+          })),
+      },
+      select: {
+        views: true,
+        title: true,
+        id: true,
+        excerpt: true,
+        cover_image_url: true,
+      },
+      take: limit,
+    });
+
+    return news;
+  }
 }
