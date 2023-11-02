@@ -38,6 +38,9 @@ export class NewsService {
   ): Promise<NewsPreview[]> {
     const response = await this.prisma.news.findMany({
       take: limit,
+      orderBy: {
+        id: "desc",
+      },
       select: {
         title: true,
         id: true,
@@ -106,20 +109,20 @@ export class NewsService {
   public async getNewsBasedOnTags(tags: string[], limit: number = 10) {
     const news = await this.prisma.news.findMany({
       where: {
-        OR: tags
-          .filter((tag) => tag !== "")
-          .map((tag) => ({
-            tags: {
-              some: {
-                name: {
-                  contains: tag,
-                  mode: "insensitive",
-                },
-              },
+        tags: {
+          some: {
+            name: {
+              in: tags,
             },
-          })),
+          },
+        },
       },
       select: {
+        tags: {
+          select: {
+            name: true,
+          },
+        },
         views: true,
         title: true,
         id: true,

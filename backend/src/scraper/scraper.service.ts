@@ -206,7 +206,7 @@ export class ScraperService {
 
         const tags = [
           ...document.querySelectorAll<HTMLLIElement>(".tags__list li"),
-        ].map((item) => item.innerText);
+        ].map((item) => item.innerText?.toLowerCase());
 
         [...postContent.childNodes].forEach((element) => {
           if (!permittedTags.includes(element.nodeName)) {

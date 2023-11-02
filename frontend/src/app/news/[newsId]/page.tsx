@@ -14,17 +14,17 @@ export default async function NewsPage({ params }: {params: { newsId: number }})
   });
 
   return (
-    <div className="bg-white py-14 px-72 text-xl text-neutral-700">
+    <div className="bg-white py-14 px-72 text-neutral-700">
       <h1 className="text-3xl font-bold">{newsData.title}</h1>
       
-      <p className="flex flex-col text-base">
+      <p className="flex flex-col text-sm py-4">
         <span>Por <strong>{newsData.user.username}</strong></span>
         <span>Em <strong>{newsData.publicationDate}</strong></span>
       </p>
 
       <hr />
 
-      <p className="my-2">{newsData.excerpt}</p>
+      <p className="my-2 text-xl">{newsData.excerpt}</p>
 
       <img className="my-4 mb-8" src={newsData.cover_image_url+"&w=1220"} />
 

@@ -21,12 +21,16 @@
     @apply text-default-red;
   }
 
+  #news-content p {
+    @apply text-lg;
+  }
+
   p > a:hover {
     @apply underline
   }
 
   #news-content h2 {
-    @apply text-2xl font-bold mt-2;
+    @apply text-2xl font-bold mt-4;
   }
 }
 

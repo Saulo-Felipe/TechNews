@@ -67,8 +67,6 @@ export class NewsController {
       "related-tags": () => this.newsService.getNewsBasedOnTags(tags, limit),
     };
 
-    console.log("---------------------reicebved;: ", tags);
-
     return await keyValue[type]();
   }
 }
