@@ -118,11 +118,6 @@ export class NewsService {
         },
       },
       select: {
-        tags: {
-          select: {
-            name: true,
-          },
-        },
         views: true,
         title: true,
         id: true,
@@ -133,5 +128,29 @@ export class NewsService {
     });
 
     return news;
+  }
+
+  public async search(searchQuery: string) {
+    return await this.prisma.news.findMany({
+      where: {
+        title: {
+          contains: searchQuery,
+          mode: "insensitive",
+        },
+      },
+      select: {
+        views: true,
+        title: true,
+        id: true,
+        excerpt: true,
+        cover_image_url: true,
+        createdAt: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
   }
 }

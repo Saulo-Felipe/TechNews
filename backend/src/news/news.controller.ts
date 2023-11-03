@@ -53,7 +53,10 @@ export class NewsController {
     return response;
   }
 
-  // =-=-=-=-=| Previews |=-=-=-=-=-=-
+  @Get("search/:searchQuery")
+  public async search(@Param() { searchQuery }: { searchQuery: string }) {
+    return await this.newsService.search(searchQuery);
+  }
 
   @Get("preview/:type")
   public async getRandom(

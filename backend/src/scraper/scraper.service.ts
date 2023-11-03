@@ -54,15 +54,15 @@ export class ScraperService {
 
       const allCategories = await page.evaluate((points) => {
         const categories = [
-          ...document.querySelectorAll(".menu__editorials li"),
-        ].map((e) => e.textContent?.trim());
+          ...document.querySelectorAll<HTMLLIElement>(".menu__editorials li"),
+        ].map((e) => e.innerText.toLowerCase());
 
         const initialPointIndex = categories.findIndex(
-          (item) => item?.toLowerCase() === points.initial,
+          (item) => item === points.initial,
         );
 
         const finalPointIndex = categories.findIndex(
-          (item) => item?.toLowerCase() === points.final,
+          (item) => item === points.final,
         );
 
         categories.splice(0, initialPointIndex);

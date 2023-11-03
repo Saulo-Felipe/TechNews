@@ -10,8 +10,7 @@ export class GetPreviewQueryDto {
   @IsArray()
   @IsString({ each: true })
   @Transform(({ value }) => {
-    const splited = value.split(",");
-    return splited.filter((tag: string) => tag !== "");
+    return JSON.parse(value);
   })
   tags: string[];
 }
