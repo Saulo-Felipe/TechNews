@@ -1,12 +1,11 @@
 import Image from "next/image";
-import { SubHeaderContent } from "./SubHeaderContent";
-import { Suspense } from "react";
-import { UserLoading } from "@/components/Header/User/UserLoading";
-import { User } from "@/components/Header/User/User";
-import { CiCloudOn, CiSearch } from "react-icons/ci";
+import { SubHeader } from "./SubHeader";
+import { User } from "@/components/Header/User";
+import { CiCloudOn } from "react-icons/ci";
 import { RiMenu4Line } from "react-icons/ri";
 import Link from "next/link";
 import { Category } from "@/types/GeneralTypes";
+import { SearchInput } from "./SearchInput";
 
 
 export async function Header() {
@@ -25,9 +24,7 @@ export async function Header() {
         <div className="items-center flex gap-2">
           <CiCloudOn className="w-6 h-6" />
 
-          <Suspense fallback={<span className="animate-pulse bg-[rgb(0,0,0,0.25)] w-20 h-6 rounded-md" />}>
-            <SubHeaderContent />
-          </Suspense>
+          <SubHeader />
         </div>
 
         <div className="smartphone:hidden">Segunda, 04 de outubro de 2023</div>
@@ -45,36 +42,21 @@ export async function Header() {
             />
           </Link>
 
-          <Suspense fallback={<UserLoading />}>
-            <User />
-          </Suspense>
+          <User />
         </div>
 
         <div className="flex items-center gap-6 smartphone:gap-2 smartphone:flex-1">
           <nav className="flex gap-3 mobile:hidden">
             {
               categories.map(({name, id}) => 
-                <Link key={id} href={`/category/${name}`}>{name}</Link>
+                <Link key={id} href={`/category/${name}`}>
+                  {name[0].toUpperCase()+name.slice(1)}
+                </Link>
               )
             }
           </nav>
 
-          <div className="flex rounded-md transition bg-[#121212] smartphone:flex-1">
-            <input
-              type="text"
-              placeholder="Faça uma pesquisa"
-              className="
-              bg-[#121212] flex-1 transition placeholder-[#4C4C4C] p-3 
-                outline-none pl-4 hover:brightness-110 rounded-md
-                text-neutral-200
-                smartphone:p-2 text-xs
-              "
-            />
-
-            <button className=" p-2 px-3 flex items-center justify-center rounded-md hover:brightness-110">
-              <CiSearch className="text-base" />
-            </button>
-          </div>
+          <SearchInput />
 
           {/* only mobile */}
           <div className="hidden mobile:block">

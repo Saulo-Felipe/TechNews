@@ -7,7 +7,14 @@ interface CardProps extends NewsPreview {
   titleSize: string;
 }
 
-export function Card({ cardPadding, titleSize, cover_image_url, excerpt, id, title }: CardProps) {
+export function Card({ 
+  cardPadding, 
+  titleSize, 
+  cover_image_url, 
+  excerpt, 
+  id, 
+  title 
+}: CardProps) {
 
   return (
     <Link 

@@ -11,7 +11,7 @@ interface TitleProps {
 export function Title({ link, title, loading }: TitleProps) {
 
   return (
-    <Link href={link ? link : "#"}>
+    <Link href={link ? link : "#"} className="w-max">
       <div className={`border-l-4 border-default-red pl-2 flex items-center gap-2 font-bold 
         ${loading ? "bg-slate-300 animate-pulse w-max rounded-md text-transparent" : ""}`}
       >

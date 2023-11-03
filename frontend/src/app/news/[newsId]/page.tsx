@@ -15,7 +15,7 @@ export default async function NewsPage({ params }: {params: { newsId: number }})
 
   return (
     <div className="bg-white py-14 px-72 text-neutral-700">
-      <h1 className="text-3xl font-bold">{newsData.title}</h1>
+      <h1 className="text-4xl font-bold">{newsData.title}</h1>
       
       <p className="flex flex-col text-sm py-4">
         <span>Por <strong>{newsData.user.username}</strong></span>
@@ -39,11 +39,13 @@ export default async function NewsPage({ params }: {params: { newsId: number }})
 
         <div className="flex items-center gap-2">
           {
-            newsData.tags.map(tag => 
+            newsData.tags.map((tag, i) => 
               <p key={tag.id}>
                 <a 
                   href={`#${tag.id}`}
                 >{tag.name}</a>
+                
+                {i < newsData.tags.length-1 ? ", " : "."}
               </p>
             )
           }

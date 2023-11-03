@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 interface UserLocationResponse {
   ip: string;
   hostname: string;
@@ -20,12 +22,14 @@ interface TemperatureResponse {
   }
 }
 
-export async function SubHeaderContent() {
+async function SubHeader() {
   try {
-    const {ip: userIp} = await (await fetch("https://api64.ipify.org?format=json", {cache: "no-store"})).json();
+    const {ip: userIp} = await (
+      await fetch("https://api64.ipify.org?format=json", { cache: "no-store" })
+    ).json();
 
     const userLocation: UserLocationResponse = await (
-      await fetch(`https://ipinfo.io/${userIp}?token=d7c2aa304b4e83`, {cache: "no-store"})
+      await fetch(`https://ipinfo.io/${userIp}?token=d7c2aa304b4e83`, { cache: "no-store" })
     ).json();
 
     const temperature: TemperatureResponse = await (
@@ -33,7 +37,7 @@ export async function SubHeaderContent() {
         latitude: userLocation.loc.split(",")[0],
         longitude: userLocation.loc.split(",")[1],
         current: "temperature"
-      }), {cache: "no-store"})
+      }), { cache: "no-store" })
     ).json();
 
     return (
@@ -47,3 +51,20 @@ export async function SubHeaderContent() {
     return "Erro ao obter localização do usuário";
   }
 }
+
+
+//--------------------> Loading version
+async function SubHeaderLoading() {
+  return (
+    <Suspense fallback={
+      <span 
+        className="animate-pulse bg-[rgb(0,0,0,0.25)] w-20 h-6 rounded-md" 
+      />
+    }>
+      <SubHeader />
+    </Suspense>
+  );
+}
+
+
+export { SubHeaderLoading as SubHeader };

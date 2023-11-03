@@ -8,15 +8,16 @@ import { Suspense } from "react";
 
 async function NewsCarouselGroup({ groupTitle, type, tags, ranking }: NewsGroupProps) {
   if (type === "related-tags") {
-    type += "?tags=";
-    tags?.forEach(tag => type += `${tag},`); // format: tag1,tag2,tag3...
+    type += `?${new URLSearchParams([["tags", JSON.stringify(tags)]])}`;
   }
   
-  console.log(type);
-
-  const fetchNews = await fetch(`${process.env["backend_url"]}/news/preview/${type}`);
+  const fetchNews = await fetch(
+    `${process.env["backend_url"]}/news/preview/${type}`
+  );
     
   const newsData: NewsPreview[] = await fetchNews.json();
+
+  
 
   return (
     <div className="pt-10 flex flex-col gap-4">
