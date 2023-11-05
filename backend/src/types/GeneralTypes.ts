@@ -1,7 +1,19 @@
-export interface DefaultResponse<DataType> {
+export interface DefaultResponse<DataType = any> {
   error?: string;
   success?: string;
   data?: DataType;
+}
+
+export interface ClassValidatorError {
+  error: string;
+  message: string[];
+  statusCode?: number;
+}
+
+export interface ClassValidatorSuccess {
+  success: string;
+  message: string[];
+  data?: any;
 }
 
 export interface NewsPreviewCardParsedToJson {

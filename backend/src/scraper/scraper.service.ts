@@ -130,6 +130,8 @@ export class ScraperService {
                 },
                 create: {
                   username: oneNews.data.author,
+                  email:
+                    oneNews.data.author.replaceAll(" ", "") + "@technews.com",
                 },
               },
             },

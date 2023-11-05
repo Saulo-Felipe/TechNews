@@ -10,7 +10,14 @@ interface CardProps {
 }
 
 
-export function Card({ category, createdAt, excerpt, cover_image_url, title, id }: CardProps) {
+export function Card({ 
+  category, 
+  createdAt, 
+  excerpt, 
+  cover_image_url, 
+  title, 
+  id
+}: CardProps) {
 
 
   return (

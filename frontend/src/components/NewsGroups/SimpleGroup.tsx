@@ -48,7 +48,7 @@ async function SimpleNewsGroup({ type, groupTitle }: NewsGroupProps) {
 
 
 //--------------------> Loading version
-async function LoadingSimpleNewsGroup(params: NewsGroupProps) {
+function LoadingSimpleNewsGroup(params: NewsGroupProps) {
 
   return (
     <Suspense fallback={

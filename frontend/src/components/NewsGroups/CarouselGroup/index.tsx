@@ -53,7 +53,7 @@ async function NewsCarouselGroup({ groupTitle, type, tags, ranking }: NewsGroupP
 
 
 //--------------------> Loading version
-async function LoadingNewsCarouselGroup(params: NewsGroupProps) {
+function LoadingNewsCarouselGroup(params: NewsGroupProps) {
   return (
     <Suspense fallback={
       <div className="pt-10 flex flex-col gap-4">

@@ -24,7 +24,7 @@ export function Card({
       <div
         className="group-hover:scale-110 news-image w-full h-full bg-no-repeat bg-cover bg-center 
         absolute transition -z-10"
-        style={{backgroundImage: `url(${cover_image_url.replace("w=", "w=1000&")})`}}
+        style={{backgroundImage: `url(${cover_image_url?.replace("w=", "w=1000&")})`}}
       />
       <div className="w-full h-full absolute -z-10 bg-[radial-gradient(transparent,rgb(0,0,0,0.8))]" />
 

@@ -3,6 +3,7 @@ import { NewsModule } from "./news/news.module";
 import { ScraperModule } from "./scraper/scraper.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { CategoryModule } from "./category/category.module";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { CategoryModule } from "./category/category.module";
     ScraperModule,
     CategoryModule,
     ScheduleModule.forRoot(),
+    AuthModule,
   ],
   controllers: [],
   providers: [],

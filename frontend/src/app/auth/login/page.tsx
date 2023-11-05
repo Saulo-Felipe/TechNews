@@ -1,17 +1,40 @@
-import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
-import { Button } from "@/components/Button";
-import { AiOutlineLogin } from "react-icons/ai";
 import Image from "next/image";
-import { Input } from "@/components/Input";
+import { Metadata } from "next";
+import { ClientForm } from "./ClientForm";
+
+
+export const metadata: Metadata = {
+  title: "TechNews - Entre na sua conta"
+};
+
 
 export default function LoginPage() {
+  
+  async function login(formData: FormData) {
+    "use server";
 
+    const response = await fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/auth/signIn`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        email: formData.get("email"),
+        password: formData.get("password")
+      })
+    });
+    const parsedResponse = await response.json();
+    
+    return parsedResponse;
+  }
   
   return (
     <div className="min-h-[100vh] flex justify-center">
 
-      <div className="bg-white rounded-md w-[27vw] h-min mt-10 p-6 tablet:w-[50vw] smartphone:w-[90vw]">
+      <div className="bg-white rounded-md w-[27vw] h-min mt-10 p-6 
+        border tablet:w-[50vw] smartphone:w-[90vw]">
         <Image 
           className="mb-6"
           width={200} 
@@ -27,24 +50,8 @@ export default function LoginPage() {
 
         <div className="text-center py-2 text-neutral-500 select-none">Ou</div>
 
-        <div className="flex flex-col gap-1">
-          <label className="w-min" htmlFor="email-input">Email</label>
-          <Input id="email-input" placeholder="Digite seu email" />
-        </div>
-
-        <div className="flex flex-col gap-1 mt-4">
-          <label className="w-min" htmlFor="password-input">Senha</label>
-          <Input id="password-input" placeholder="Digite seu senha de acesso" />
-        </div>
-
-        <div className="text-xs flex items-center gap-1 mt-2 pt-2">
-          <span>Não possui uma conta?</span> 
-          <Link className="underline text-blue-600" href={"/auth/register"}>Cadastre-se</Link>
-        </div>
-
-        <div className="flex justify-end pt-6">
-          <Button Icon={AiOutlineLogin}>Entrar</Button>
-        </div>
+        
+        <ClientForm login={login} />
       </div>
     </div>
   );

@@ -34,6 +34,7 @@
   ],
   "rules": {
     "react/react-in-jsx-scope": "off", // remove mandatory import from react
+    "@typescript-eslint/no-explicit-any": "ignore",
     "quotes": [
       "warn",
       "double"

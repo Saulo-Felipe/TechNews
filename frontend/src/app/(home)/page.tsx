@@ -1,6 +1,12 @@
-import { NewsCarouselGroup } from "@/components/NewsGroups/Carousel/CarouselGroup";
+import { NewsCarouselGroup } from "@/components/NewsGroups/CarouselGroup";
 import { MainNews } from "./_components/MainNews/MainNews";
 import { SimpleNewsGroup } from "@/components/NewsGroups/SimpleGroup";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "TechNews - Home"
+};
+
 
 export default function HomePage() {  
 

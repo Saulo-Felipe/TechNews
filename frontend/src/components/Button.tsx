@@ -1,3 +1,5 @@
+"use client";
+
 import { ButtonHTMLAttributes, ReactNode } from "react";
 import { IconType } from "react-icons";
 import { twMerge } from "tailwind-merge";
@@ -7,9 +9,17 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   Icon?: IconType;
   loading?: boolean;
+  onClickAction?: () => void;
 }
 
-export function Button({loading, children, className, Icon, ...props}: ButtonProps) {
+export function Button({
+  loading, 
+  children, 
+  className, 
+  Icon, 
+  onClickAction,
+  ...props
+}: ButtonProps) {
 
   return (
     <button
@@ -20,6 +30,7 @@ export function Button({loading, children, className, Icon, ...props}: ButtonPro
         items-center justify-center gap-2 text-sm disabled:opacity-75 disabled:cursor-not-allowed`,
         className)
       }
+      onClick={onClickAction}
     >
       {children}
 

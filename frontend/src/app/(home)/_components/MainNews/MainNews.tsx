@@ -7,7 +7,7 @@ import { Suspense } from "react";
 async function MainNews() {
   const response = await fetch(`${process.env["backend_url"]}/news/preview/random?limit=3`);
   const allNews: NewsPreview[] = await response.json();
-
+  
   return (
     <div className={
       twMerge(
@@ -40,7 +40,7 @@ async function MainNews() {
 
 
 
-async function MainNewsLoading() {
+function MainNewsLoading() {
 
   return (
     <Suspense fallback={

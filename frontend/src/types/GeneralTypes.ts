@@ -24,6 +24,27 @@ export interface User {
   email: string | null;
 }
 
+export interface ValidatorErrorResponse {
+  error?: string;
+  message?: string[],
+  statusCode?: number;
+}
+
+export interface ValidatorSuccessResponse<T = any> {
+  success?: string;
+  message?: string[];
+  data?: T;
+}
+
+export interface ValidatorResponse extends ValidatorErrorResponse, ValidatorSuccessResponse {};
+
+
+export interface DefaultResponse<T> {
+  error?: string;
+  success?: string;
+  data?: T;
+}
+
 
 export interface Tag {
   id: number;
