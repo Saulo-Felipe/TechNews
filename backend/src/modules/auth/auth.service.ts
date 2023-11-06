@@ -55,8 +55,9 @@ export class AuthService {
       },
     });
 
-    if (!user)
+    if (!user) {
       return { error: "Bad Request", message: ["Usuário não cadastrado"] };
+    }
 
     const isEqual = bcrypt.compareSync(params.password, user.password);
 
@@ -64,12 +65,14 @@ export class AuthService {
       return { error: "Bad Request", message: ["Senha ou email inválido"] };
     }
 
-    const payload = { id: user.id };
+    const payload = {
+      id: user.id,
+    };
 
     return {
       success: "Sucesso",
       message: ["Login realizado com sucesso!"],
-      data: await this.jwtService.signAsync(payload),
+      data: await this.jwtService.signAsync(payload), // secret was configured globally
     };
   }
 }

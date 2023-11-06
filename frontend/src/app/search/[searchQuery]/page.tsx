@@ -30,20 +30,24 @@ export default async function SearchPage({params: {searchQuery}}: {params: {sear
   const newsData: SearchNewsPreview[] = await fetch(`${process.env["backend_url"]}/news/search/${searchQuery}`)
     .then(resp => resp.json());
   
-  await new Promise(resolve => setTimeout(resolve, 50000));
-
   return (
     <div className="px-desktop py-8 flex flex-col gap-4 mb-10">
       <SearchBar initialState={searchQuery} />
 
       {
-        newsData.map(news => 
-          <Card 
-            {...news}
-            key={news.id}
-            category={news.category.name}
-          />
-        )
+        newsData.length > 0 
+          ? newsData.map(news => 
+            <Card 
+              {...news}
+              key={news.id}
+              category={news.category.name}
+            />
+          )
+          : (
+            <div className="bold text-center text-2xl min-h-[70vh]">
+              Nenhuma notícia encontrada para "{searchQuery}"
+            </div>
+          )
       }
     </div>
   );

@@ -1,9 +1,10 @@
 import { Module } from "@nestjs/common";
-import { NewsModule } from "./news/news.module";
-import { ScraperModule } from "./scraper/scraper.module";
+import { NewsModule } from "./modules/news/news.module";
+import { ScraperModule } from "./modules/scraper/scraper.module";
 import { ScheduleModule } from "@nestjs/schedule";
-import { CategoryModule } from "./category/category.module";
-import { AuthModule } from "./auth/auth.module";
+import { CategoryModule } from "./modules/category/category.module";
+import { AuthModule } from "./modules/auth/auth.module";
+import { UserModule } from "./modules/user/user.module";
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AuthModule } from "./auth/auth.module";
     CategoryModule,
     ScheduleModule.forRoot(),
     AuthModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],

@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Input } from "../_components/Input";
 import { Button } from "@/components/Button";
 import { AiOutlineLogin } from "react-icons/ai";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DefaultResponse, ValidatorResponse } from "@/types/GeneralTypes";
-import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
+import Cookies from "js-cookie";
 
 interface ClientFormProps {
   login: (formData: FormData) => Promise<DefaultResponse<string>>;
@@ -16,7 +16,8 @@ interface ClientFormProps {
 export function ClientForm({ login }: ClientFormProps) {
   const [message, setMessage] = useState<ValidatorResponse>({});
   const [isLoading, setIsLoading] = useState(false);
-  const navigation = useRouter();
+  const msgTimeRef = useRef<NodeJS.Timeout>();
+
 
   async function handleLogin(formData: FormData) {
     setIsLoading(true);
@@ -24,12 +25,21 @@ export function ClientForm({ login }: ClientFormProps) {
       setIsLoading(false);
       setMessage({ ...response });
 
-      if (response.success) setTimeout(() => navigation.push("/"), 1000);
+      if (response.success) {
+        Cookies.set("auth_token", response.data);
+        setTimeout(() => window.location.href = "/", 1000);
+      }
     });
   }
 
   useEffect(() => {
-    setTimeout(() => setMessage({}), 4000);
+    if (Object.keys(message).length > 0) {
+      clearInterval(msgTimeRef.current);
+
+      msgTimeRef.current = setTimeout(() => {
+        setMessage({});
+      }, 4000)
+    }
   }, [message]);
 
   return (
@@ -66,7 +76,7 @@ export function ClientForm({ login }: ClientFormProps) {
           return (
             <div
               key={i}
-              className={twMerge(color, "text-red-600 text-center py-4")}
+              className={twMerge(color, "text-center py-1")}
             >{msg}</div>
           )
         })

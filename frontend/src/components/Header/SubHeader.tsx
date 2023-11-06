@@ -58,7 +58,7 @@ async function SubHeaderLoading() {
   return (
     <Suspense fallback={
       <span 
-        className="animate-pulse bg-[rgb(0,0,0,0.25)] w-20 h-6 rounded-md" 
+        className="animate-pulse bg-gray-800 w-20 h-6 rounded-md" 
       />
     }>
       <SubHeader />

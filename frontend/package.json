@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@lexical/react": "^0.12.2",
+    "@types/js-cookie": "^3.0.5",
     "axios": "^1.6.0",
     "html-react-parser": "^5.0.3",
+    "js-cookie": "^3.0.5",
     "lexical": "^0.12.2",
     "next": "14.0.1",
     "nextjs-toploader": "^1.6.4",

@@ -1,11 +1,28 @@
+import { User } from "@/types/GeneralTypes";
 import Link from "next/link";
 import { Suspense } from "react";
 import { BiSolidUser } from "react-icons/bi";
+import { cookies } from "next/headers";
 
 
 async function User() {
+  const token = cookies().get("auth_token");
 
-  await new Promise(resolve => setTimeout(resolve, 4000));
+  let user: User | null = null;
+
+  if (token) {
+    user = await fetch(`${process.env["backend_url"]}/user/get-data`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        token: token["value"]
+      }),
+      cache: "no-cache"
+    }).then(resp => resp.json());
+  }
 
   return (
     <div className="flex items-center gap-3 smartphone:hidden">
@@ -13,7 +30,13 @@ async function User() {
         <BiSolidUser className="text-xl text-[#4C4C4C]" />
       </div>
 
-      <Link href={"/auth/login"}>Entre / Cadastre-se</Link> 
+      {
+        user ? (
+          <div>{user.username}</div>
+        ) : (
+          <Link href={"/auth/login"}>Entre / Cadastre-se</Link> 
+        )
+      }
     </div>
   );
 }
