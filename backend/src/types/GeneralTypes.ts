@@ -5,13 +5,13 @@ export interface DefaultResponse<DataType = any> {
 }
 
 export interface ClassValidatorError {
-  error: string;
+  error: string | boolean;
   message: string[];
   statusCode?: number;
 }
 
 export interface ClassValidatorSuccess {
-  success: string;
+  success: string | boolean;
   message: string[];
   data?: any;
 }

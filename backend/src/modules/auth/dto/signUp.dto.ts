@@ -1,14 +1,12 @@
-import { IsEmail, IsString, MinLength } from "class-validator";
+import { IsEmail, MinLength } from "class-validator";
 
 export class SignUpDto {
-  @IsEmail()
+  @IsEmail({}, { message: "Email inválido" })
   email: string;
 
-  @IsString()
-  @MinLength(6)
+  @MinLength(6, { message: "A senha deve ter pelo menos 6 caracteres." })
   password: string;
 
-  @IsString()
-  @MinLength(3)
+  @MinLength(3, { message: "O username deve ter pelo menos 3 caracteres." })
   username: string;
 }

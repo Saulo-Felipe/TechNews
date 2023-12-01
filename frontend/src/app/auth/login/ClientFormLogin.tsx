@@ -13,7 +13,7 @@ interface ClientFormProps {
   login: (formData: FormData) => Promise<DefaultResponse<string>>;
 }
 
-export function ClientForm({ login }: ClientFormProps) {
+export function ClientFormLogin({ login }: ClientFormProps) {
   const [message, setMessage] = useState<ValidatorResponse>({});
   const [isLoading, setIsLoading] = useState(false);
   const msgTimeRef = useRef<NodeJS.Timeout>();
@@ -21,9 +21,10 @@ export function ClientForm({ login }: ClientFormProps) {
 
   async function handleLogin(formData: FormData) {
     setIsLoading(true);
+
     login(formData).then(async (response: ValidatorResponse) => {
-      setIsLoading(false);
       setMessage({ ...response });
+      setIsLoading(false);
 
       if (response.success) {
         Cookies.set("auth_token", response.data);

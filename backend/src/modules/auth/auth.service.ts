@@ -3,7 +3,6 @@ import { PrismaService } from "src/database/prisma.service";
 import {
   ClassValidatorError,
   ClassValidatorSuccess,
-  DefaultResponse,
 } from "src/types/GeneralTypes";
 import { User } from "@prisma/client";
 import { SignUpDto } from "./dto/signUp.dto";
@@ -18,14 +17,20 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  public async signUp(params: SignUpDto): Promise<DefaultResponse> {
+  public async signUp(
+    params: SignUpDto,
+  ): Promise<ClassValidatorError | ClassValidatorSuccess> {
     const user = await this.prismaService.user.findFirst({
       where: {
         OR: [{ username: params.username }, { email: params.email }],
       },
     });
 
-    if (user) return { error: "Este nome de usuário ou email já está em uso" };
+    if (user)
+      return {
+        error: true,
+        message: ["Este nome de usuário ou email já está em uso"],
+      };
 
     // encrypt password
     const salt = bcrypt.genSaltSync(10);
@@ -41,7 +46,8 @@ export class AuthService {
     delete newUser.password;
 
     return {
-      success: "Usuário criado com sucesso",
+      success: true,
+      message: ["Usuário criado com sucesso"],
       data: newUser,
     };
   }

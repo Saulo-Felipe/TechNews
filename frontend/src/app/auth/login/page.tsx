@@ -1,7 +1,7 @@
 import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
 import { Metadata } from "next";
-import { ClientForm } from "./ClientForm";
+import { ClientFormLogin } from "./ClientFormLogin";
 
 
 export const metadata: Metadata = {
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   
-  async function login(formData: FormData) {
+  async function loginAction(formData: FormData) {
     "use server";
 
     const response = await fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/auth/signIn`, {
@@ -51,7 +51,7 @@ export default function LoginPage() {
         <div className="text-center py-2 text-neutral-500 select-none">Ou</div>
 
         
-        <ClientForm login={login} />
+        <ClientFormLogin login={loginAction} />
       </div>
     </div>
   );
