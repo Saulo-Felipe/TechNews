@@ -46,7 +46,7 @@ export async function Header() {
         </div>
 
         <div className="flex items-center gap-6 smartphone:gap-2 smartphone:flex-1">
-          <nav className="flex gap-3 mobile:hidden">
+          <nav className="flex gap-3 mobile:hidden items-center">
             {
               categories.map(({name, id}) => 
                 <Link key={id} href={`/category/${name}`}>
@@ -54,6 +54,11 @@ export async function Header() {
                 </Link>
               )
             }
+            
+            <Link 
+              className="bg-[rgb(255,255,255,0.03)] border border-neutral-800 p-1 px-2 rounded-md" 
+              href={"/update-database"}>
+              Atualizar base de dados</Link>
           </nav>
 
           <SearchInput />

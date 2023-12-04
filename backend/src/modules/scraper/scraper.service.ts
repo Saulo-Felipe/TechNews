@@ -6,12 +6,16 @@ import {
   ScrapeLatestNewsURL,
   ScrapeOneNews,
 } from "src/types/GeneralTypes";
+import { SocketGateway } from "./socket.gateway";
 
 @Injectable()
 export class ScraperService {
   private page: Page;
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly socketGateway: SocketGateway,
+  ) {}
 
   public async updateCNNCategories(points: {
     initial: string;
@@ -19,9 +23,7 @@ export class ScraperService {
   }): Promise<DefaultResponse<{ name: string }[]>> {
     const scrapedCategories = await this._scrapeCategories({ ...points });
 
-    if (scrapedCategories.error) {
-      return { error: scrapedCategories.error };
-    }
+    if (scrapedCategories.error) return { error: scrapedCategories.error };
 
     const dbCategories: string[] = (
       await this.prisma.category.findMany({ select: { name: true } })

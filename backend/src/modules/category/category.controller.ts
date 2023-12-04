@@ -8,9 +8,7 @@ export class CategoryController {
 
   @Get("teste")
   public async sleep() {
-    return await new Promise((resolve) =>
-      setTimeout(() => resolve("Ola mundo"), 8000),
-    );
+    return "ola mundo";
   }
 
   @Get()

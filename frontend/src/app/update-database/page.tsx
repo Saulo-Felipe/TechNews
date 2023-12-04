@@ -1,10 +1,40 @@
 "use client";
-
 import { Button } from "@/components/Button";
+import { useEffect, useRef, useState } from "react";
 import { BsDatabase } from "react-icons/bs";
+import { io, Socket } from "socket.io-client";
 
+
+interface Log {
+  status: "info" | "success" | "error";
+  message: string;
+}
 
 export default function UpdateDatabase() {
+  const socketRef = useRef<Socket | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [logs, setLogs] = useState<Log[]>([]);
+
+  async function handleStartUpdate() {
+    setIsLoading(true);
+
+    await fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/scraper/update-categories`, {
+      headers: {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+      }
+    });
+
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    const socket = io(String(process.env["NEXT_PUBLIC_BACKEND_URL"]));
+
+    socket.on("new-message", (message: Log) => {
+      setLogs(prevState => [...prevState, message])
+    });
+  }, []);
 
   return (
     <div className="px-72 pt-10 pb-32 bg-white">
@@ -17,9 +47,12 @@ export default function UpdateDatabase() {
 
       <div className="flex mt-8 gap-6">
         <div className="flex flex-col flex-[0.5]">
-          <select className="bg-[#F7F7F7] border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            <option selected disabled>Selecione uma plataforma para importar os dados</option>
-            <option className="text-red">CNN Brasil</option>
+          <select 
+            className="bg-[#F7F7F7] border border-gray-300 text-gray-900 
+            text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            defaultValue={"cnn"}>
+            <option disabled>Selecione uma plataforma para importar os dados</option>
+            <option value={"cnn"} className="text-red">CNN Brasil</option>
           </select>
 
           <div className="overflow-hidden mt-4 relative rounded-2xl 
@@ -27,23 +60,32 @@ export default function UpdateDatabase() {
             <span className="absolute right-0 bg-[#D9D9D9] p-4 rounded-se-2xl rounded-es-2xl select-none">Logs</span>
 
             <div className="h-full p-3 overflow-scroll">
-              <div className="text-red-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
-              <div className="text-green-500 py-1">log aqui lgo aqui log aqui</div>
+              {
+                logs.map((log, i) => <div
+                  key={i}
+                  className={`${
+                    log.status == "success" 
+                    ? "text-green-500"
+                    : log.status == "error" 
+                      ? "text-red-500"
+                      : ""
+                    }`
+                  }>{log.message}</div>
+                )
+              }
             </div>
           </div>
           
-          <div className="flex justify-end">
-            <Button className="mt-4">Iniciar Atualização</Button>
+          <div className="flex justify-end gap-4">
+            <Button 
+              loading={isLoading}
+              onClickAction={handleStartUpdate} 
+              className="mt-4">Atualizar Notícias</Button>
+
+            <Button 
+              loading={isLoading}
+              onClickAction={handleStartUpdate} 
+              className="mt-4">Atualizar Categorias</Button>              
           </div>
         </div>
 

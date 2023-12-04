@@ -1,12 +1,7 @@
-import { Button } from "@/components/Button";
-import { Input } from "@/app/auth/_components/Input";
 import { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { ClientFormRegister } from "./ClientFormRegister";
-import { DefaultResponse } from "@/types/GeneralTypes";
-
 
 export const metadata: Metadata = {
   title: "TechNews - Cadastre-se"
