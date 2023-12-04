@@ -6,14 +6,14 @@ import { GetCategoriesDto } from "./dto/getCategories.dto";
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get("teste")
-  public async sleep() {
-    return "ola mundo";
-  }
-
   @Get()
-  public async get(@Query() params: GetCategoriesDto) {
+  public async getCategories(@Query() params: GetCategoriesDto) {
     console.log("[GET]: categories");
     return await this.categoryService.get(params.limit);
+  }
+
+  @Get("update-history")
+  public async getUpdateHistory() {
+    return await this.categoryService.getUpdateHistory();
   }
 }

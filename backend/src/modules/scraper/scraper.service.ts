@@ -38,6 +38,13 @@ export class ScraperService {
       await this.prisma.category.createMany({ data: formatedData });
     }
 
+    await this.prisma.updateHistory.create({
+      data: {
+        type: "category",
+        updated_amount: formatedData.length,
+      },
+    });
+
     return {
       success: "Categorias atualizadas com sucesso",
       data: formatedData,
@@ -49,7 +56,7 @@ export class ScraperService {
     final: string;
   }): Promise<DefaultResponse<string[]>> {
     try {
-      const browser = await puppeteer.launch({ headless: true });
+      const browser = await puppeteer.launch({ headless: false });
       const page = await browser.newPage();
 
       await page.goto("https://www.cnnbrasil.com.br/");
@@ -57,7 +64,7 @@ export class ScraperService {
       const allCategories = await page.evaluate((points) => {
         const categories = [
           ...document.querySelectorAll<HTMLLIElement>(".menu__editorials li"),
-        ].map((e) => e.innerText.toLowerCase());
+        ].map((e) => e.textContent.toLowerCase().trim());
 
         const initialPointIndex = categories.findIndex(
           (item) => item === points.initial,

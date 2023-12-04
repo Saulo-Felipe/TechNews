@@ -13,4 +13,12 @@ export class CategoryService {
 
     return dbCategories;
   }
+
+  public async getUpdateHistory() {
+    const response = await this.prisma.updateHistory.findMany({
+      take: 10,
+    });
+
+    return response;
+  }
 }

@@ -55,8 +55,9 @@ model Tag {
   news News[]
 }
 
-model NewsHistory {
-  id        Int      @id @default(autoincrement())
-  newsQtd   Int
-  createdAt DateTime @default(now())
+model updateHistory {
+  id             Int      @id @default(autoincrement())
+  type           String // news or categorie
+  updated_amount Int
+  createdAt      DateTime @default(now())
 }

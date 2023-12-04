@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Post } from "@nestjs/common";
 import { ScraperService } from "./scraper.service";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { SocketGateway } from "./socket.gateway";
@@ -9,30 +9,50 @@ export class ScraperContoller {
     private readonly scraperService: ScraperService,
     private readonly socketGateway: SocketGateway,
   ) {}
-  private isUpdating: boolean = false;
+  private readonly isUpdating = {
+    categories: false,
+    news: false,
+  };
+
+  @Get("status")
+  public getStatus() {
+    return this.isUpdating;
+  }
 
   @Cron(CronExpression.EVERY_WEEK)
-  @Get("update-categories")
+  @Post("update-categories")
   public async updateCategories() {
-    const points = { initial: "esportes", final: "lifestyle" };
+    try {
+      if (this.isUpdating.categories) return;
 
-    if (this.isUpdating) return {};
+      this.isUpdating.categories = true;
+      this.socketGateway.io.emit("change-loading-state", this.isUpdating);
 
-    this.socketGateway.io.emit("new-message", {
-      status: "info",
-      message: "Buscando nova categorias...",
-    });
-    this.isUpdating = true;
+      const points = { initial: "esportes", final: "lifestyle" };
 
-    const response = await this.scraperService.updateCNNCategories(points);
+      this.socketGateway.io.emit("new-message", {
+        status: "info",
+        message: "Buscando novas categorias...",
+      });
 
-    this.socketGateway.io.emit("new-message", {
-      status: response.error ? "error" : "success",
-      message: response.error || response.success,
-    });
-    this.isUpdating = false;
+      const response = await this.scraperService.updateCNNCategories(points);
 
-    return "";
+      this.socketGateway.io.emit("new-message", {
+        status: response.success ? "success" : "error",
+        message:
+          response.error ||
+          `Categorias atualizadas: + ${response.data.length} categorias adicionadas`,
+      });
+    } catch (e) {
+      this.socketGateway.io.emit("new-message", {
+        status: "error",
+        message: "Ocorreu um erro interno no servidor",
+      });
+    }
+
+    this.isUpdating.categories = false;
+    this.socketGateway.io.emit("change-loading-state", this.isUpdating);
+    return;
   }
 
   @Get("update-news")

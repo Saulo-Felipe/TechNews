@@ -10,30 +10,70 @@ interface Log {
   message: string;
 }
 
+interface IsLoadingStatus {
+  categories: boolean;
+  news: boolean;
+}
+
+interface UpdateHistory {
+  id: number;
+  type: "category" | "news";
+  updated_amount: number;
+  createdAt: string;
+}
+
 export default function UpdateDatabase() {
   const socketRef = useRef<Socket | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<IsLoadingStatus>({
+    categories: true,
+    news: true
+  });
   const [logs, setLogs] = useState<Log[]>([]);
+  const [updateHistory, setUpdateHistory] = useState<UpdateHistory[]>([])
 
-  async function handleStartUpdate() {
-    setIsLoading(true);
-
-    await fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/scraper/update-categories`, {
+  async function handleStartUpdateCategories() {
+    fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/scraper/update-categories`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "accept": "application/json"
       }
     });
-
-    setIsLoading(false);
   }
 
   useEffect(() => {
     const socket = io(String(process.env["NEXT_PUBLIC_BACKEND_URL"]));
 
+    const verifyStatus = async () => {
+      const isUpdating = await (
+        await fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/scraper/status`)
+      ).json();
+
+      console.log("reiceved: ", isUpdating)
+
+      setIsLoading(isUpdating);
+    };
+
+    const getUpdateHistory = async () => {
+      const updateHistory = await (
+        await fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/category/update-history`)
+      ).json();
+
+      console.log(updateHistory);
+
+      setUpdateHistory(updateHistory);
+    }
+
     socket.on("new-message", (message: Log) => {
       setLogs(prevState => [...prevState, message])
     });
+
+    socket.on("change-loading-state", (newState: IsLoadingStatus) => {
+      setIsLoading(newState);
+    });
+
+    verifyStatus();
+    getUpdateHistory();
   }, []);
 
   return (
@@ -47,15 +87,15 @@ export default function UpdateDatabase() {
 
       <div className="flex mt-8 gap-6">
         <div className="flex flex-col flex-[0.5]">
-          <select 
-            className="bg-[#F7F7F7] border border-gray-300 text-gray-900 
+          <select
+            className="bg-[#F7F7F7] border border-gray-300 text-gray-900
             text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             defaultValue={"cnn"}>
             <option disabled>Selecione uma plataforma para importar os dados</option>
             <option value={"cnn"} className="text-red">CNN Brasil</option>
           </select>
 
-          <div className="overflow-hidden mt-4 relative rounded-2xl 
+          <div className="overflow-hidden mt-4 relative rounded-2xl
             border bg-[#F7F7F7] w-full h-80 border-gray-300">
             <span className="absolute right-0 bg-[#D9D9D9] p-4 rounded-se-2xl rounded-es-2xl select-none">Logs</span>
 
@@ -64,9 +104,9 @@ export default function UpdateDatabase() {
                 logs.map((log, i) => <div
                   key={i}
                   className={`${
-                    log.status == "success" 
+                    log.status == "success"
                     ? "text-green-500"
-                    : log.status == "error" 
+                    : log.status == "error"
                       ? "text-red-500"
                       : ""
                     }`
@@ -75,17 +115,25 @@ export default function UpdateDatabase() {
               }
             </div>
           </div>
-          
-          <div className="flex justify-end gap-4">
-            <Button 
-              loading={isLoading}
-              onClickAction={handleStartUpdate} 
-              className="mt-4">Atualizar Notícias</Button>
 
-            <Button 
-              loading={isLoading}
-              onClickAction={handleStartUpdate} 
-              className="mt-4">Atualizar Categorias</Button>              
+          <div className="flex justify-end gap-4">
+            {
+              !isLoading.news && (
+                <Button
+                  loading={isLoading.categories}
+                  onClickAction={handleStartUpdateCategories}
+                  className="mt-4">Atualizar Categorias</Button>
+              )
+            }
+            {
+              !isLoading.categories && (
+                <Button
+                  loading={isLoading.news}
+                  onClickAction={handleStartUpdateCategories}
+                  className="mt-4">Atualizar Notícias</Button>
+              )
+            }
+
           </div>
         </div>
 
@@ -94,14 +142,20 @@ export default function UpdateDatabase() {
         <div className="flex-[0.5]">
           <div className="font-semibold text-lg">Últimas atualizações</div>
           
-          <div className="border flex bg-[#F7F7F7] rounded-md w-max mt-5">
-            <span className="p-3">21/10/2023 ás 13:45</span>
-            <span className="w-[1px] bg-slate-200" />
-            <span className="p-3 text-green-500">+20 novas notícias</span>
-          </div>
+          {
+            updateHistory.map(item => (
+              <div key={item.id} className="border flex bg-[#F7F7F7] rounded-md w-max mt-5">
+                <span className="p-3">{item.createdAt}</span>{/*21/10/2023 ás 13:45 */}
+                <span className="w-[1px] bg-slate-200" />
+                <span className="p-3">
+                  <span className="text-green-500">+ {item.updated_amount}</span> novas {item.type == "category" ? "categorias" : "notícias"}
+                </span>
+              </div>
+            ))
+          }
         </div>
       </div>
-      
+
     </div>
   );
 }
