@@ -2,22 +2,14 @@ import Image from "next/image";
 import { SubHeader } from "./SubHeader";
 import { User } from "@/components/Header/User";
 import { CiCloudOn } from "react-icons/ci";
-import { RiMenu4Line } from "react-icons/ri";
 import Link from "next/link";
-import { Category } from "@/types/GeneralTypes";
 import { SearchInput } from "./SearchInput";
+import { Categories } from "./Categories";
+import { MobileMenu } from "./MobileMenu";
+import { DropdownOtherLinks } from "./DropdownOtherLinks";
 
 
-export async function Header() {
-  const fetchResponse = await fetch(`${process.env["backend_url"]}/category?limit=5`, {
-    method: "GET",
-    next: {
-      revalidate: 60 * 60 * 24 // 24 hours 
-    }
-  });
-  const categories: Category[] = await fetchResponse.json();
-
-
+export function Header() {
   return (
     <header className="bg-black text-white">
       <section className="px-desktop bg-[#121212] text-xs py-2 flex items-center justify-between tablet:px-tablet smartphone:px-smartphone">
@@ -46,30 +38,21 @@ export async function Header() {
         </div>
 
         <div className="flex items-center gap-6 smartphone:gap-2 smartphone:flex-1">
-          <nav className="flex gap-3 mobile:hidden items-center">
-            {
-              categories.map(({name, id}) => 
-                <Link key={id} href={`/category/${name}`}>
-                  {name[0].toUpperCase()+name.slice(1)}
-                </Link>
-              )
-            }
+          
+          <div className="flex gap-2 mobile:hidden items-center">
+            <Categories />
             
-            <Link 
-              className="bg-[rgb(255,255,255,0.03)] border border-neutral-800 p-1 px-2 rounded-md" 
-              href={"/update-database"}>
-              Atualizar base de dados</Link>
-          </nav>
+            <DropdownOtherLinks />
+          </div>
 
           <SearchInput />
 
           {/* only mobile */}
-          <div className="hidden mobile:block">
-            <RiMenu4Line className="text-xl" />
-          </div>
+          <MobileMenu />
         </div>
 
       </section>
     </header>
   );
 }
+

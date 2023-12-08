@@ -8,7 +8,6 @@ export class CategoryController {
 
   @Get()
   public async getCategories(@Query() params: GetCategoriesDto) {
-    console.log("[GET]: categories");
     return await this.categoryService.get(params.limit);
   }
 

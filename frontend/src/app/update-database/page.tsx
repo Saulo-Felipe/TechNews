@@ -2,8 +2,9 @@
 import { Button } from "@/components/Button";
 import { useEffect, useRef, useState } from "react";
 import { BsDatabase } from "react-icons/bs";
-import { io, Socket } from "socket.io-client";
-
+import { io } from "socket.io-client";
+import parse from "html-react-parser";
+ 
 
 interface Log {
   status: "info" | "success" | "error";
@@ -23,21 +24,24 @@ interface UpdateHistory {
 }
 
 export default function UpdateDatabase() {
-  const socketRef = useRef<Socket | null>(null);
   const [isLoading, setIsLoading] = useState<IsLoadingStatus>({
     categories: true,
     news: true
   });
   const [logs, setLogs] = useState<Log[]>([]);
   const [updateHistory, setUpdateHistory] = useState<UpdateHistory[]>([])
+  const logsContainerRef = useRef<HTMLDivElement | null>(null);
 
   async function handleStartUpdateCategories() {
     fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/scraper/update-categories`, {
+      method: "POST"
+    });
+  }
+
+  async function handleStartUpdateNews() {
+    console.log("Iniciando news update");
+    fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/scraper/update-news`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "accept": "application/json"
-      }
     });
   }
 
@@ -49,8 +53,6 @@ export default function UpdateDatabase() {
         await fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/scraper/status`)
       ).json();
 
-      console.log("reiceved: ", isUpdating)
-
       setIsLoading(isUpdating);
     };
 
@@ -59,13 +61,11 @@ export default function UpdateDatabase() {
         await fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/category/update-history`)
       ).json();
 
-      console.log(updateHistory);
-
       setUpdateHistory(updateHistory);
     }
 
     socket.on("new-message", (message: Log) => {
-      setLogs(prevState => [...prevState, message])
+      setLogs(prevState => [...prevState, message]);
     });
 
     socket.on("change-loading-state", (newState: IsLoadingStatus) => {
@@ -76,16 +76,18 @@ export default function UpdateDatabase() {
     getUpdateHistory();
   }, []);
 
+  useEffect(() => logsContainerRef.current?.scrollTo(0, 9999999), [logs]);
+
   return (
-    <div className="px-72 pt-10 pb-32 bg-white">
+    <div className="px-64 pt-10 pb-32 bg-white tablet:px-20 smartphone:px-5">
       <h1 className="flex items-center mb-2 font-bold text-3xl">
         <BsDatabase />
         Atualizar banco de dados
       </h1>
 
-      <hr />
+      <hr className="smartphone:hidden" />
 
-      <div className="flex mt-8 gap-6">
+      <div className="flex mt-8 gap-6 smartphone:flex-col">
         <div className="flex flex-col flex-[0.5]">
           <select
             className="bg-[#F7F7F7] border border-gray-300 text-gray-900
@@ -99,18 +101,24 @@ export default function UpdateDatabase() {
             border bg-[#F7F7F7] w-full h-80 border-gray-300">
             <span className="absolute right-0 bg-[#D9D9D9] p-4 rounded-se-2xl rounded-es-2xl select-none">Logs</span>
 
-            <div className="h-full p-3 overflow-scroll">
+            <div ref={logsContainerRef} className="h-full p-3 overflow-scroll flex flex-col">
               {
-                logs.map((log, i) => <div
-                  key={i}
-                  className={`${
-                    log.status == "success"
-                    ? "text-green-500"
-                    : log.status == "error"
-                      ? "text-red-500"
-                      : ""
-                    }`
-                  }>{log.message}</div>
+                logs.map((log, i) => 
+                  <div key={i}>
+                    <div
+                      className={`mt-3 ${
+                        log.status == "success"
+                        ? "text-green-500"
+                        : log.status == "error"
+                          ? "text-red-500"
+                          : ""
+                        }`
+                      }>{parse(log.message)}</div>
+
+                      <small className="text-neutral-500">{new Date().toLocaleString()}</small>
+
+                      <hr className="mt-2 "/>
+                  </div>
                 )
               }
             </div>
@@ -122,15 +130,15 @@ export default function UpdateDatabase() {
                 <Button
                   loading={isLoading.categories}
                   onClickAction={handleStartUpdateCategories}
-                  className="mt-4">Atualizar Categorias</Button>
+                  className="mt-4">{isLoading.categories ? "Atualizando" : "Atualizar"} Categorias</Button>
               )
             }
             {
               !isLoading.categories && (
                 <Button
                   loading={isLoading.news}
-                  onClickAction={handleStartUpdateCategories}
-                  className="mt-4">Atualizar Notícias</Button>
+                  onClickAction={handleStartUpdateNews}
+                  className="mt-4">{isLoading.news ? "Atualizando" : "Atualizar"} Notícias</Button>
               )
             }
 
@@ -139,16 +147,19 @@ export default function UpdateDatabase() {
 
         <span className="bg-slate-300 w-[1px]" />
 
-        <div className="flex-[0.5]">
+        <div className="flex-[0.5]  overflow-y-scroll h-96">
           <div className="font-semibold text-lg">Últimas atualizações</div>
           
           {
             updateHistory.map(item => (
               <div key={item.id} className="border flex bg-[#F7F7F7] rounded-md w-max mt-5">
-                <span className="p-3">{item.createdAt}</span>{/*21/10/2023 ás 13:45 */}
+                <span className="p-3">
+                  {new Date(item.createdAt).toLocaleString()}
+                </span>
                 <span className="w-[1px] bg-slate-200" />
                 <span className="p-3">
-                  <span className="text-green-500">+ {item.updated_amount}</span> novas {item.type == "category" ? "categorias" : "notícias"}
+                  <span className="text-green-500">+ {item.updated_amount} </span> 
+                   novas {item.type == "category" ? "categorias" : "notícias"}
                 </span>
               </div>
             ))

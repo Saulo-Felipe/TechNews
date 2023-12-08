@@ -56,7 +56,7 @@ export class ScraperService {
     final: string;
   }): Promise<DefaultResponse<string[]>> {
     try {
-      const browser = await puppeteer.launch({ headless: false });
+      const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
 
       await page.goto("https://www.cnnbrasil.com.br/");
@@ -90,7 +90,7 @@ export class ScraperService {
   }
 
   public async updateCNNNews() {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     this.page = await browser.newPage();
 
     const latestNewsResponseURLs = await this._scrapeLatestNewsURL();
@@ -119,7 +119,16 @@ export class ScraperService {
 
       if (oneNews.error) {
         console.log("\nErro na noticia: ", newsUrl);
+        this.socketGateway.io.emit("new-message", {
+          status: "error",
+          message: `<strong>Erro: </strong> não foi possível importar a notícia, ${newsUrl.url}`,
+        });
       } else {
+        this.socketGateway.io.emit("new-message", {
+          status: "info",
+          message: `<strong>Nova notícia encontrada:</strong> ${oneNews.data.title}`,
+        });
+
         await this.prisma.news.create({
           data: {
             views: 0,
@@ -172,6 +181,13 @@ export class ScraperService {
     }
 
     await browser.close();
+
+    await this.prisma.updateHistory.create({
+      data: {
+        type: "news",
+        updated_amount: scrapedNews.length,
+      },
+    });
 
     return scrapedNews;
   }

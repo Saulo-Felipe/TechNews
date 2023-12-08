@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 interface CardProps extends NewsPreview {
   cardPadding: string;
   titleSize: string;
+  gradient?: boolean;
 }
 
 export function Card({ 
@@ -13,7 +14,8 @@ export function Card({
   cover_image_url, 
   excerpt, 
   id, 
-  title 
+  title,
+  gradient=true
 }: CardProps) {
 
   return (
@@ -26,11 +28,13 @@ export function Card({
         absolute transition -z-10"
         style={{backgroundImage: `url(${cover_image_url?.replace("w=", "w=1000&")})`}}
       />
-      <div className="w-full h-full absolute -z-10 bg-[radial-gradient(transparent,rgb(0,0,0,0.8))]" />
+      <div className={`w-full h-full absolute -z-10 
+        ${gradient ? "bg-[radial-gradient(transparent,rgb(0,0,0,0.8))]" : "bg-slate-300"}`} 
+      />
 
       <div className={twMerge(cardPadding, "text-white smartphone:p-3")}>
-        <div className="py-2">{excerpt}</div>
-        <div className={twMerge(titleSize, "font-bold smartphone:text-2xl")}>{title}</div>
+        <div className="py-2 line-clamp-2">{excerpt}</div>
+        <div className={twMerge(titleSize, "font-bold smartphone:text-2xl line-clamp-2")}>{title}</div>
       </div>
     </Link>
   );

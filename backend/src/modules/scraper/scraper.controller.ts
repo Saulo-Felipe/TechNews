@@ -55,10 +55,34 @@ export class ScraperContoller {
     return;
   }
 
-  @Get("update-news")
+  @Post("update-news")
   public async updateNews() {
-    const response = await this.scraperService.updateCNNNews();
+    try {
+      if (this.isUpdating.news) return;
 
-    return response;
+      this.isUpdating.news = true;
+      this.socketGateway.io.emit("change-loading-state", this.isUpdating);
+
+      this.socketGateway.io.emit("new-message", {
+        status: "info",
+        message: "Iniciando a busca de novas notícias...",
+      });
+
+      const response = await this.scraperService.updateCNNNews();
+
+      this.socketGateway.io.emit("new-message", {
+        status: "success",
+        message: `Atualização realizada com sucesso: + ${response.length} novas notícias`,
+      });
+    } catch (e) {
+      this.socketGateway.io.emit("new-message", {
+        status: "error",
+        message: "Ocorreu um erro interno no servidor",
+      });
+    }
+
+    this.isUpdating.news = false;
+    this.socketGateway.io.emit("change-loading-state", this.isUpdating);
+    return;
   }
 }

@@ -29,9 +29,8 @@ export default async function NewsPage({ params }: {params: { newsId: number }})
     cache: "reload"
   });
 
-
   return (
-    <div className="bg-white py-14 px-72 text-neutral-700">
+    <div className="bg-white py-14 px-72 text-neutral-700 smartphone:px-smartphone tablet:px-tablet">
       <h1 className="text-4xl font-bold">{newsData.title}</h1>
       
       <p className="flex flex-col text-sm py-4">
@@ -51,10 +50,10 @@ export default async function NewsPage({ params }: {params: { newsId: number }})
         {htmlParser(newsData.content.replaceAll("CNN", "TechNews"))}
       </div>
 
-      <div className="border border-neutral-300 rounded-md p-2 px-4 flex items-center mt-4">
-        <div className="font-bold mr-2">Tags: </div>
+      <div className="border border-neutral-300 rounded-md p-2 px-4 flex items-center mt-4 smartphone:items-start">
+        <div className="font-bold mr-2 smartphone:py-2">Tags: </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap smartphone:gap-0">
           {
             newsData.tags.map((tag, i) => 
               <p key={tag.id}>

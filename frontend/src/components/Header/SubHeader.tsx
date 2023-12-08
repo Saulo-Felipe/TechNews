@@ -22,7 +22,7 @@ interface TemperatureResponse {
   }
 }
 
-async function SubHeader() {
+export async function SubHeader() {
   try {
     const {ip: userIp} = await (
       await fetch("https://api64.ipify.org?format=json", { cache: "no-store" })
@@ -41,30 +41,13 @@ async function SubHeader() {
     ).json();
 
     return (
-      <>
+      <Suspense fallback={<span className="animate-pulse bg-gray-800 w-20 h-6 rounded-md"/>}>
         <div>{`${temperature.current.temperature} ${temperature.current_units.temperature}`}</div>
         <div>{`${userLocation.city}, ${userLocation.region} - ${userLocation.country}`}</div>
-      </>
+      </Suspense>
     );
 
   } catch(e) {
     return "Erro ao obter localização do usuário";
   }
 }
-
-
-//--------------------> Loading version
-async function SubHeaderLoading() {
-  return (
-    <Suspense fallback={
-      <span 
-        className="animate-pulse bg-gray-800 w-20 h-6 rounded-md" 
-      />
-    }>
-      <SubHeader />
-    </Suspense>
-  );
-}
-
-
-export { SubHeaderLoading as SubHeader };

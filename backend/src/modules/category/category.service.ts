@@ -17,6 +17,9 @@ export class CategoryService {
   public async getUpdateHistory() {
     const response = await this.prisma.updateHistory.findMany({
       take: 10,
+      orderBy: {
+        id: "desc",
+      },
     });
 
     return response;

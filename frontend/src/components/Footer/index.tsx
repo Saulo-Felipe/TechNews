@@ -7,7 +7,8 @@ export function Footer() {
 
   return (
     <footer className="bg-black text-white">
-      <div className="flex px-desktop py-8 gap-12">
+      <div className="flex px-desktop py-8 gap-12 smartphone:px-smartphone 
+      tablet:px-tablet smartphone:flex-wrap">
         <Link href={"/"}>
           <Image
             width={100}
@@ -18,7 +19,7 @@ export function Footer() {
           />
         </Link>
 
-        <LinksContainer
+        <LinksContainer 
           title="Categorias"
           links={[
             {url: "/", content: "Categoria 1"},
