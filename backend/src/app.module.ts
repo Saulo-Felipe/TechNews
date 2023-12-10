@@ -5,6 +5,7 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { CategoryModule } from "./modules/category/category.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UserModule } from "./modules/user/user.module";
+import { PrismaService } from "./database/prisma.service";
 
 @Module({
   imports: [
@@ -13,9 +14,9 @@ import { UserModule } from "./modules/user/user.module";
     CategoryModule,
     ScheduleModule.forRoot(),
     AuthModule,
-    UserModule,
+    UserModule
   ],
   controllers: [],
-  providers: [],
+  providers: [PrismaService],
 })
 export class AppModule {}
