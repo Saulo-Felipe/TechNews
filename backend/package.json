@@ -8,7 +8,7 @@
   "scripts": {
     "vercel-build": "npm run prisma-deploy && npm run remove-fronted",
     "prisma-deploy": "npx prisma generate && npx prisma migrate deploy",
-    "remove-fronted": "rm -rf frontend",
+    "remove-fronted": "rm -rf frontend && rm -rf ../frontend",
 
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
