@@ -6,7 +6,7 @@ import { FaGear } from "react-icons/fa6";
 import { twJoin } from "tailwind-merge";
 
 export function DropdownOtherLinks() {
-  const [dropdownIsOpen, setDropdownIsOpen] = useState(true);
+  const [dropdownIsOpen, setDropdownIsOpen] = useState(false);
 
   function handleChangeDropdownState() {
     setDropdownIsOpen(prev => !prev);

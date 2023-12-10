@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 
 
 export default function HomePage() {  
-
   return (
     <div className="px-desktop min-h-[100vh] pb-32 tablet:px-tablet smartphone:px-smartphone">
       <MainNews />

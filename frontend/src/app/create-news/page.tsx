@@ -44,25 +44,28 @@ export default function CreateNewsPage() {
     <EditorComposer>
       <>
         <MyCustom editorRef={editorRef}  />
-        <Editor locale={"ptBr"} onChange={handleChange} hashtagsEnabled actionsEnabled emojisEnabled >
-          <ToolbarPlugin defaultFontSize="20px">
-            <FontFamilyDropdown />
-            <FontSizeDropdown />
-            <Divider />
-            <BoldButton />
-            <ItalicButton />
-            <UnderlineButton />
-            <CodeFormatButton />
-            <InsertLinkButton />
-            <TextColorPicker />
-            <BackgroundColorPicker />
-            <TextFormatDropdown />
-            <Divider />
-            <InsertDropdown enableYoutube enablePoll enableImage  />
-            <Divider />
-            <AlignDropdown />
-          </ToolbarPlugin>
-        </Editor>
+
+        <div className="mx-2">
+          <Editor locale={"ptBr"} onChange={handleChange} hashtagsEnabled actionsEnabled emojisEnabled >
+            <ToolbarPlugin defaultFontSize="20px">
+              <FontFamilyDropdown />
+              <FontSizeDropdown />
+              <Divider />
+              <BoldButton />
+              <ItalicButton />
+              <UnderlineButton />
+              <CodeFormatButton />
+              <InsertLinkButton />
+              <TextColorPicker />
+              <BackgroundColorPicker />
+              <TextFormatDropdown />
+              <Divider />
+              <InsertDropdown enableYoutube enablePoll enableImage  />
+              <Divider />
+              <AlignDropdown />
+            </ToolbarPlugin>
+          </Editor>
+        </div>
           
         <div className="flex justify-end my-6">
           <Button>Publicar</Button>

@@ -13,7 +13,7 @@ export async function MainNews() {
       <Suspense fallback={<Loading />}>
         <div className={
           twMerge(
-            "mt-10 flex gap-2 h-[70vh] smartphone:flex-col", 
+            "mt-10 flex gap-2 h-[70vh] smartphone:flex-col tablet:h-[40vh]", 
             allNews.length === 0 ? "animate-pulse" : ""
           )}
         >
