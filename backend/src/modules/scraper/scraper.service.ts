@@ -7,6 +7,7 @@ import {
   ScrapeOneNews,
 } from "src/types/GeneralTypes";
 import { SocketGateway } from "./socket.gateway";
+import * as chromium from "chromium";
 
 @Injectable()
 export class ScraperService {
@@ -56,7 +57,10 @@ export class ScraperService {
     final: string;
   }): Promise<DefaultResponse<string[]>> {
     try {
-      const browser = await puppeteer.launch({ headless: true });
+      const browser = await puppeteer.launch({
+        headless: true,
+        executablePath: chromium.path,
+      });
       const page = await browser.newPage();
 
       await page.goto("https://www.cnnbrasil.com.br/");
@@ -90,7 +94,10 @@ export class ScraperService {
   }
 
   public async updateCNNNews() {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({
+      headless: true,
+      executablePath: chromium.path,
+    });
     this.page = await browser.newPage();
 
     const latestNewsResponseURLs = await this._scrapeLatestNewsURL();
