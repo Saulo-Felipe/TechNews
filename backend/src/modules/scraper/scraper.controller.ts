@@ -68,11 +68,12 @@ export class ScraperContoller {
         message: "Iniciando a busca de novas notícias...",
       });
 
-      const response = await this.scraperService.updateCNNNews();
+      const updatedNewsCount: number =
+        await this.scraperService.updateCNNNews();
 
       this.socketGateway.io.emit("new-message", {
         status: "success",
-        message: `Atualização realizada com sucesso: + ${response.length} novas notícias`,
+        message: `Atualização realizada com sucesso: + ${updatedNewsCount} novas notícias`,
       });
     } catch (e) {
       this.socketGateway.io.emit("new-message", {

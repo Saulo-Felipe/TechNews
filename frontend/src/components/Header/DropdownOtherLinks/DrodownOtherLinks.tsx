@@ -18,7 +18,7 @@ export function DropdownOtherLinks() {
 
       <div 
         className={twJoin(`absolute flex flex-col w-max bg-gray-950 border select-none
-          border-gray-600 p-4 rounded-md gap-2 right-0 top-[calc(100%+0.75rem)]`,
+          border-gray-600 p-4 rounded-md gap-2 right-0 top-[calc(100%+0.75rem)] z-50`,
           dropdownIsOpen ? "block" : "hidden"
         )}
       >

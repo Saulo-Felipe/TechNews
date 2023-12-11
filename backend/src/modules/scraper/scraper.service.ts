@@ -62,6 +62,7 @@ export class ScraperService {
         executablePath: chromium.path,
       });
       const page = await browser.newPage();
+      page.setDefaultNavigationTimeout(60000);
 
       await page.goto("https://www.cnnbrasil.com.br/");
 
@@ -93,12 +94,13 @@ export class ScraperService {
     }
   }
 
-  public async updateCNNNews() {
+  public async updateCNNNews(): Promise<number> {
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       executablePath: chromium.path,
     });
     this.page = await browser.newPage();
+    this.page.setDefaultNavigationTimeout(60000);
 
     const latestNewsResponseURLs = await this._scrapeLatestNewsURL();
     const lastDBNewsUrl = await this.prisma.news.findFirst({
@@ -118,10 +120,17 @@ export class ScraperService {
       latestNewsResponseURLs.splice(index, latestNewsResponseURLs.length);
     }
 
-    const scrapedNews: ScrapeOneNews[] = [];
+    let updatedNewsCount: 0;
 
     for (const newsUrl of latestNewsResponseURLs) {
+      this.socketGateway.io.emit("new-message", {
+        status: "info",
+        message: `Importando nova notícia...`,
+      });
+
       this.page = await browser.newPage();
+      this.page.setDefaultNavigationTimeout(60000);
+
       const oneNews = await this._scrapeOneNews(newsUrl.url);
 
       if (oneNews.error) {
@@ -131,11 +140,6 @@ export class ScraperService {
           message: `<strong>Erro: </strong> não foi possível importar a notícia, ${newsUrl.url}`,
         });
       } else {
-        this.socketGateway.io.emit("new-message", {
-          status: "info",
-          message: `<strong>Nova notícia encontrada:</strong> ${oneNews.data.title}`,
-        });
-
         await this.prisma.news.create({
           data: {
             views: 0,
@@ -182,7 +186,13 @@ export class ScraperService {
             },
           },
         });
-        scrapedNews.push(oneNews.data);
+
+        this.socketGateway.io.emit("new-message", {
+          status: "success",
+          message: `<strong>Nova notícia salva:</strong> ${oneNews.data.title}`,
+        });
+
+        updatedNewsCount++;
       }
       await this.page.close();
     }
@@ -192,11 +202,11 @@ export class ScraperService {
     await this.prisma.updateHistory.create({
       data: {
         type: "news",
-        updated_amount: scrapedNews.length,
+        updated_amount: updatedNewsCount,
       },
     });
 
-    return scrapedNews;
+    return updatedNewsCount;
   }
 
   private async _scrapeLatestNewsURL(): Promise<ScrapeLatestNewsURL[]> {
