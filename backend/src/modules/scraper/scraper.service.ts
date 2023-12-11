@@ -96,7 +96,7 @@ export class ScraperService {
 
   public async updateCNNNews(): Promise<number> {
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       executablePath: chromium.path,
     });
     this.page = await browser.newPage();
@@ -120,7 +120,7 @@ export class ScraperService {
       latestNewsResponseURLs.splice(index, latestNewsResponseURLs.length);
     }
 
-    let updatedNewsCount: 0;
+    let updatedNewsCount: number = 0;
 
     for (const newsUrl of latestNewsResponseURLs) {
       this.socketGateway.io.emit("new-message", {
