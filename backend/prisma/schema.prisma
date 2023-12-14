@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  username String  @unique @db.VarChar(255)
+  email    String  @db.VarChar(255)
+  password String? @db.VarChar(255)
+
+  news News[]
+}
+
+model News {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(255)
+  content         String   @db.VarChar
+  cover_image_url String   @db.VarChar(600)
+  images_url      String[] @db.VarChar
+  content_type    String   @db.VarChar(5) // html or json
+  url             String   @db.VarChar(600)
+  excerpt         String   @db.VarChar(600)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  originalContent String   @db.VarChar(10) // CNN or TechNews
+  views           Int      @db.Integer
+  publicationDate String?  @db.VarChar(100)
+
+  // Relations
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: NoAction)
+
+  tags Tag[]
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+
+  news News[]
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(255)
+
+  news News[]
+}
+
+model updateHistory {
+  id             Int      @id @default(autoincrement())
+  type           String // news or categorie
+  updated_amount Int
+  createdAt      DateTime @default(now())
+}

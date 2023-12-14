@@ -1,0 +1,57 @@
+{
+  // "files": ["*.ts", "*.tsx"],
+  "ignorePatterns": ["node_modules/", "build/"],
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
+  ],
+  "overrides": [
+    {
+      "env": {
+        "node": true
+      },
+      "files": [
+        ".eslintrc.{js,cjs}"
+      ],
+      "parserOptions": {
+        "sourceType": "script"
+      }
+    }
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react"
+  ],
+  "rules": {
+    "react/react-in-jsx-scope": "off", // remove mandatory import from react
+    "@typescript-eslint/no-explicit-any": "ignore",
+    "quotes": [
+      "warn",
+      "double"
+    ],
+    "jsx-quotes": [
+      "warn",
+      "prefer-double"
+    ],
+    "array-bracket-spacing": "warn",
+    "indent": [
+      "warn",
+      2
+    ],
+    "no-unused-vars": "warn",
+    "semi": [
+      2,
+      "always"
+    ]
+  }
+}
