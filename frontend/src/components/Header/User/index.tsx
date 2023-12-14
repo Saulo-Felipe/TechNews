@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { BiSolidUser } from "react-icons/bi";
 import { cookies } from "next/headers";
 import { twMerge } from "tailwind-merge";
+import { Logout } from "./Logout";
 
 interface UserProps {
   className?: string;
@@ -37,7 +38,10 @@ export async function User({ className }: UserProps) {
 
         {
           user ? (
-            <div>{user.username}</div>
+            <div className="flex items-center gap-2">
+              {user.username} 
+              <Logout />
+            </div>
           ) : (
             <Link href={"/auth/login"}>Entre / Cadastre-se</Link>
           )
