@@ -6,7 +6,11 @@ import { Suspense } from "react";
 
 export async function MainNews() {
   try {
-    const response = await fetch(`${process.env["backend_url"]}/news/preview/random?limit=3`);
+    const response = await fetch(`${process.env["backend_url"]}/news/preview/random?limit=3`, {
+      next: {
+        revalidate: 60 * 60 // 1h
+      }
+    });
     const allNews: NewsPreview[] = await response?.json() || [];
     
     return (

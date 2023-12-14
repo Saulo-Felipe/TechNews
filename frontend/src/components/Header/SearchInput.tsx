@@ -1,15 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useRouter } from "next/navigation";
+import { ImSpinner8 } from "react-icons/im";
+import { usePathname } from 'next/navigation'
 
 export function SearchInput() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useRouter();
+  const pathname = usePathname();
 
   function handleNavigateToSearch() {
-    navigation.push("/search/"+inputRef.current?.value);
+    if ((inputRef.current?.value.length || 0) > 0 && !isLoading) {
+      setIsLoading(true);
+      navigation.push("/search/"+inputRef.current?.value);
+    }
   }
 
   useEffect(() => {
@@ -21,6 +28,8 @@ export function SearchInput() {
       }
     });
   }, []);
+
+  useEffect(() => setIsLoading(false), [pathname]);
 
   return (
 
@@ -44,7 +53,12 @@ export function SearchInput() {
         className=" p-2 px-3 flex items-center justify-center rounded-md hover:brightness-110"
         onClick={handleNavigateToSearch}
       >
-        <CiSearch className="text-base" />
+        { 
+          isLoading 
+            ? <ImSpinner8 className="animate-spin" />
+            : <CiSearch className="text-base" />
+        }
+        
       </button>
     </div>    
   );
