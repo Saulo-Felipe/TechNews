@@ -5,6 +5,7 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { CategoryModule } from "./modules/category/category.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UserModule } from "./modules/user/user.module";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
@@ -13,7 +14,10 @@ import { UserModule } from "./modules/user/user.module";
     CategoryModule,
     ScheduleModule.forRoot(),
     AuthModule,
-    UserModule
+    UserModule,
+    ConfigModule.forRoot({
+      envFilePath: [".development.env", ".production.env"],
+    }),
   ],
   controllers: [],
   providers: [],

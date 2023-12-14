@@ -1,6 +1,5 @@
 version: "3.8"
 
-
 services:
   nest-web-server:
     build: .
@@ -8,7 +7,3 @@ services:
       - 3000:3000
     environment:
       - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@portfolio.cfxfzejdeou6.sa-east-1.rds.amazonaws.com:5432/technews?schema=public
-
-    
-
-
