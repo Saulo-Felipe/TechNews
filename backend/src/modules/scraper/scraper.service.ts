@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import puppeteer, { Page } from "puppeteer";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../../database/prisma.service";
 import {
   DefaultResponse,
   ScrapeLatestNewsURL,
   ScrapeOneNews,
-} from "src/types/GeneralTypes";
+} from "../../types/GeneralTypes";
 import { SocketGateway } from "./socket.gateway";
 import * as chromium from "chromium";
+
 
 @Injectable()
 export class ScraperService {

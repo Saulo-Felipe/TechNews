@@ -7,6 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "nest start",
+    "build": "npm run prisma-deploy && npx nest build",
     "dev": "nest start --watch",
     "start:prod": "node dist/main",
     "prisma-deploy": "npx prisma generate && npx prisma migrate deploy",
@@ -32,14 +33,14 @@
     "@types/bcrypt": "^5.0.1",
     "@types/jsdom": "^21.1.4",
     "bcrypt": "^5.1.1",
-    "chromium": "^3.0.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "jsdom": "^22.1.0",
     "puppeteer": "^21.4.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "chromium": "^3.0.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

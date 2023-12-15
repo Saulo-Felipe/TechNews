@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { GetUserDataDto } from "./dto/getUserData.dto";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../../database/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 
 @Controller("user")

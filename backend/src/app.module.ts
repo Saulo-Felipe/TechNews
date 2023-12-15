@@ -16,7 +16,7 @@ import { ConfigModule } from "@nestjs/config";
     AuthModule,
     UserModule,
     ConfigModule.forRoot({
-      envFilePath: [".development.env", ".production.env"],
+      envFilePath: [".development.env", ".production.env", ".env"],
     }),
   ],
   controllers: [],

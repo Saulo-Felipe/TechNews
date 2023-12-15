@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { CreateNewsDto } from "./dto/createNews.dto";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../../database/prisma.service";
 import { News } from "@prisma/client";
-import { DefaultResponse, NewsPreview } from "src/types/GeneralTypes";
+import { DefaultResponse, NewsPreview } from "../../types/GeneralTypes";
 
 @Injectable()
 export class NewsService {

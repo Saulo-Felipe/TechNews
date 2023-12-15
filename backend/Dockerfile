@@ -1,9 +1,15 @@
-FROM node:18-alpine
+FROM node:20-alpine
+
 WORKDIR /app
+
 COPY package*.json .
+
 RUN npm ci
+
 COPY ./* .
-RUN npx nest build
-RUN npm run prisma-deploy
+
+RUN npm run build
+
 EXPOSE 3000
-CMD [ "npm", "run", "start:prod" ]
+
+CMD ["npm", "run", "start:prod"]

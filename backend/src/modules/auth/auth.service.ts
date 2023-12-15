@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaService } from "../../database/prisma.service";
 import {
   ClassValidatorError,
   ClassValidatorSuccess,
-} from "src/types/GeneralTypes";
+} from "../../types/GeneralTypes";
 import { User } from "@prisma/client";
 import { SignUpDto } from "./dto/signUp.dto";
 import { SignInDto } from "./dto/signIn.dto";
