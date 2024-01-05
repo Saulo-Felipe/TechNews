@@ -4,8 +4,9 @@ import { Title } from "../Title";
 import { Suspense } from "react";
 
 export interface NewsGroupProps {
-  type: "random" | "latest" | "most-accessed" | "related-tags";
+  type: "random" | "latest" | "most-accessed" | "category";
   groupTitle: string;
+  category?: string;
 
   tags?: string[];
   ranking?: boolean;

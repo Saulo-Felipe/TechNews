@@ -8,8 +8,10 @@ RUN npm ci
 
 COPY ./* .
 
-RUN npm run build
+RUN npx prisma generate \
+  && npx prisma migrate deploy \
+  && npm run build
 
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["npm", "run", "start:prod"]

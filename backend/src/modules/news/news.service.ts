@@ -55,7 +55,6 @@ export class NewsService {
   public async getManyRandomPreview(
     limit: number = 10,
   ): Promise<NewsPreview[]> {
-    console.log("entrei");
     const totalNewsCount = await this.prisma.news.count();
 
     const randomValue = Math.floor(Math.random() * (totalNewsCount - limit));
@@ -99,32 +98,9 @@ export class NewsService {
             username: true,
           },
         },
+        category: true,
         tags: true,
       },
-    });
-
-    return news;
-  }
-
-  public async getNewsBasedOnTags(tags: string[], limit: number = 10) {
-    const news = await this.prisma.news.findMany({
-      where: {
-        tags: {
-          some: {
-            name: {
-              in: tags,
-            },
-          },
-        },
-      },
-      select: {
-        views: true,
-        title: true,
-        id: true,
-        excerpt: true,
-        cover_image_url: true,
-      },
-      take: limit,
     });
 
     return news;
@@ -152,5 +128,28 @@ export class NewsService {
         },
       },
     });
+  }
+
+  public async getByCategory(category: string, limit = 25) {
+    const response = await this.prisma.news.findMany({
+      where: {
+        category: {
+          name: {
+            contains: category,
+            mode: "insensitive",
+          },
+        },
+      },
+      select: {
+        category: true,
+        title: true,
+        id: true,
+        excerpt: true,
+        cover_image_url: true,
+      },
+      take: limit,
+    });
+
+    return response;
   }
 }

@@ -1,4 +1,4 @@
-import { HamburgerMenu } from "./HamburgerIcon";
+import { HamburgerMenu } from "./HamburgerMenu";
 import { User } from "../User";
 import { Categories } from "../Categories";
 import { BiCategoryAlt } from "react-icons/bi";
@@ -19,7 +19,7 @@ export function MobileMenu() {
           <BiCategoryAlt className="text-xl" />
           Categorias
         </div>
-
+        
         <Categories className="pl-6 mobile:flex flex-col items-start" />
       </div>
 
@@ -30,13 +30,13 @@ export function MobileMenu() {
         </div>
 
         <div className="flex flex-col gap-3 pl-6">
-          <Link
-            href={"/update-database"}>
-            Atualizar base de dados</Link>
+          <Link href={"/update-database"}>
+            Atualizar base de dados
+          </Link>
 
-          <Link
-            href={"/create-news"}>
-            Criar nova notícia</Link>
+          <Link href={"/create-news"}>
+            Criar nova notícia
+          </Link>
         </div>
       </div>
 

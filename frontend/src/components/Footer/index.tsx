@@ -1,9 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LinksContainer } from "./LinksContainer";
+import { Category } from "@/types/GeneralTypes";
 
-export function Footer() {
-
+export async function Footer() {
+  const fetchResponse = await fetch(`${process.env["backend_url"]}/category?limit=20`, {
+    method: "GET",
+    next: {
+      revalidate: 60 // 1 min 
+    }
+  });
+  const categories: Category[] = await fetchResponse?.json() || [];
 
   return (
     <footer className="bg-black text-white">
@@ -20,14 +27,11 @@ export function Footer() {
         </Link>
 
         <LinksContainer 
-          title="Categorias"
-          links={[
-            {url: "/", content: "Categoria 1"},
-            {url: "/", content: "Categoria 2"},
-            {url: "/", content: "Categoria 3"},
-            {url: "/", content: "Categoria 4"},
-            {url: "/", content: "Categoria 5"},
-          ]}
+          title="Categorias 1"
+          links={categories.slice(0, 5).map(item => ({ 
+            content: item.name, 
+            url: `/category/${item.name}`
+          }))}
         />
 
         <LinksContainer
@@ -40,26 +44,28 @@ export function Footer() {
           ]}
         />
 
-        <LinksContainer
-          title="Categorias"
-          links={[
-            {url: "/", content: "Categoria 1"},
-            {url: "/", content: "Categoria 2"},
-            {url: "/", content: "Categoria 3"},
-            {url: "/", content: "Categoria 4"},
-            {url: "/", content: "Categoria 5"},
-          ]}
+        <LinksContainer 
+          title="Categorias 2"
+          links={categories.slice(5, 10).map(item => ({ 
+            content: item.name, 
+            url: `/category/${item.name}`
+          }))}
         />
 
-        <LinksContainer
-          title="Categorias"
-          links={[
-            {url: "/", content: "Categoria 1"},
-            {url: "/", content: "Categoria 2"},
-            {url: "/", content: "Categoria 3"},
-            {url: "/", content: "Categoria 4"},
-            {url: "/", content: "Categoria 5"},
-          ]}
+        <LinksContainer 
+          title="Categorias 3"
+          links={categories.slice(10, 15).map(item => ({ 
+            content: item.name, 
+            url: `/category/${item.name}`
+          }))}
+        />
+
+        <LinksContainer 
+          title="Categorias 4"
+          links={categories.slice(15, 20).map(item => ({ 
+            content: item.name, 
+            url: `/category/${item.name}`
+          }))}
         />
       </div>
 

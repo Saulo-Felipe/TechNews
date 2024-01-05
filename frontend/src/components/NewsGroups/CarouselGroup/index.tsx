@@ -6,16 +6,24 @@ import { CarouselControl } from "./CarouselControl";
 import { Suspense } from "react";
 
 
-export async function NewsCarouselGroup({ groupTitle, type, tags, ranking }: NewsGroupProps) {
+export async function NewsCarouselGroup({ 
+  groupTitle, 
+  type, 
+  ranking,
+  category 
+}: NewsGroupProps) {
+  
   try {
-    if (type === "related-tags") {
-      type += `?${new URLSearchParams([["tags", JSON.stringify(tags)]])}`;
+    let params = `/news/preview/${type}`;
+
+    if (type === "category") {
+      params = `/news/category/${category}`;
     }
-  
-    const fetchNews = await fetch(`${process.env["backend_url"]}/news/preview/${type}`);
-  
+    
+    const fetchNews = await fetch(`${process.env["backend_url"] + params}`);
+
     const newsData: NewsPreview[] = await fetchNews?.json() || [];
-  
+    
     return (
       <Suspense fallback={<Loading />}>
         <div className="pt-10 flex flex-col gap-4">

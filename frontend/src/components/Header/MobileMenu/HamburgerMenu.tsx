@@ -23,22 +23,24 @@ export function HamburgerMenu({ children }: HamburgerMenuProps) {
   }, [menuIsOpen])
 
   return (
-    <div className="hidden mobile:block">
+    <div className="hidden mobile:block z-[200]">
       <div onClick={handleChagenMenuState}>
         <RiMenu4Line className="text-xl" />
       </div>
 
-      {/* menu content */}
       <div className={`${!menuIsOpen && "hidden"} bg-zinc-800 absolute w-[80vw] h-[100vh] 
-      top-0 left-0 z-10 p-6`}>
+        top-0 left-0 z-10 p-6`
+      }>
         <div className="flex justify-end">
           <IoClose className={"text-lg"} onClick={handleChagenMenuState} />
         </div>
-        <span className="absolute w-[80vw] h-[100vh] 
-        bg-[rgb(0,0,0,0.7)] backdrop-blur-md -right-full top-0"/>
 
         {children}
       </div>
+
+      <span className={`absolute w-[80vw] h-[100vh] bg-[rgb(0,0,0,0.7)] 
+        backdrop-blur-md top-0 right-0 ${!menuIsOpen && "hidden"}`}
+      />
     </div>
   );
 }

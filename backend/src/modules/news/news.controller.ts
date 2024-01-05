@@ -13,6 +13,7 @@ import { CreateNewsDto } from "./dto/createNews.dto";
 import {
   GetPreviewQueryDto,
   NewsIdParam,
+  QueryNewsByCatgoryDto,
   QueryPreviewTypeDto,
 } from "./dto/getNews.dto";
 
@@ -60,16 +61,20 @@ export class NewsController {
 
   @Get("preview/:type")
   public async getRandom(
-    @Query() { limit, tags }: GetPreviewQueryDto,
+    @Query() { limit }: GetPreviewQueryDto,
     @Param() { type }: QueryPreviewTypeDto,
   ) {
     const keyValue = {
       random: () => this.newsService.getManyRandomPreview(limit),
       "most-accessed": () => this.newsService.getMostAccessedPreview(),
       latest: () => this.newsService.getManyLatestPreview(limit),
-      "related-tags": () => this.newsService.getNewsBasedOnTags(tags, limit),
     };
 
     return await keyValue[type]();
+  }
+
+  @Get("category/:category")
+  public async getByCategory(@Param() { category }: QueryNewsByCatgoryDto) {
+    return await this.newsService.getByCategory(category);
   }
 }

@@ -43,14 +43,6 @@ export default function LoginPage() {
           alt="technews logotipo" 
         />
         
-        <div className="flex items-center border p-2 pl-4 gap-2 rounded-md cursor-pointer border-neutral-400 hover:border-neutral-600">
-          <FcGoogle className="text-2xl" />
-          <span>Entrar com Google</span>
-        </div>
-
-        <div className="text-center py-2 text-neutral-500 select-none">Ou</div>
-
-        
         <ClientFormLogin login={loginAction} />
       </div>
     </div>

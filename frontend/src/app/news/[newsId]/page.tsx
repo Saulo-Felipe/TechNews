@@ -47,7 +47,7 @@ export default async function NewsPage({ params }: {params: { newsId: number }})
       {/* content */}
       
       <div id="news-content">
-        {htmlParser(newsData.content.replaceAll("CNN", "TechNews"))}
+        {htmlParser(newsData.content)}
       </div>
 
       <div className="border border-neutral-300 rounded-md p-2 px-4 flex items-center mt-4 smartphone:items-start">
@@ -70,8 +70,8 @@ export default async function NewsPage({ params }: {params: { newsId: number }})
       
       <NewsCarouselGroup 
         groupTitle="Notícias Relacionadas" 
-        type="related-tags" 
-        tags={newsData.tags.map(e => e.name)} 
+        type="category" 
+        category={newsData.category.name}
       />
     </div>
   );

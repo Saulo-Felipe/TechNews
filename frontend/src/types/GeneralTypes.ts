@@ -54,6 +54,10 @@ export interface Tag {
 export interface NewsWithUserAndTag extends News {
   user: User;
   tags: Tag[];
+  category: {
+    id: number;
+    name: string;
+  };
 }
 
 export interface NewsPreview {

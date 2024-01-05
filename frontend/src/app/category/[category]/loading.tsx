@@ -1,7 +1,10 @@
+import { Title } from "./_components/Title";
+
 export default function Loading() {
 
   return (
     <div className="px-desktop py-8 flex flex-col gap-4 mb-10">
+      <Title category={"Carregando..."} />
 
       {
         [1, 2, 3, 4].map(item => 

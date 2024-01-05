@@ -9,7 +9,6 @@ import {
 import { SocketGateway } from "./socket.gateway";
 import * as chromium from "chromium";
 
-
 @Injectable()
 export class ScraperService {
   private page: Page;
@@ -96,6 +95,7 @@ export class ScraperService {
   }
 
   public async updateCNNNews(): Promise<number> {
+    // scrapper configs
     const browser = await puppeteer.launch({
       headless: true,
       executablePath: chromium.path,
@@ -103,8 +103,9 @@ export class ScraperService {
     this.page = await browser.newPage();
     this.page.setDefaultNavigationTimeout(60000);
 
-    const latestNewsResponseURLs = await this._scrapeLatestNewsURL();
-    const lastDBNewsUrl = await this.prisma.news.findFirst({
+    let latestNewsResponseURLs = (await this._scrapeLatestNewsURL()).reverse();
+
+    const dbInitPoint = await this.prisma.news.findFirst({
       orderBy: {
         id: "desc",
       },
@@ -113,13 +114,14 @@ export class ScraperService {
       },
     });
 
-    const filterUrls = latestNewsResponseURLs.map((i) => i.url);
+    const initialIndex = latestNewsResponseURLs.findIndex(
+      (item) => item.url === dbInitPoint.url,
+    );
 
-    if (lastDBNewsUrl !== null && filterUrls.includes(lastDBNewsUrl.url)) {
-      const index = filterUrls.findIndex((item) => item === lastDBNewsUrl.url);
-
-      latestNewsResponseURLs.splice(index, latestNewsResponseURLs.length);
-    }
+    latestNewsResponseURLs = latestNewsResponseURLs.slice(
+      initialIndex + 1,
+      latestNewsResponseURLs.length,
+    );
 
     let updatedNewsCount: number = 0;
 

@@ -39,7 +39,6 @@ export default function UpdateDatabase() {
   }
 
   async function handleStartUpdateNews() {
-    console.log("Iniciando news update");
     fetch(`${process.env["NEXT_PUBLIC_BACKEND_URL"]}/scraper/update-news`, {
       method: "POST",
     });

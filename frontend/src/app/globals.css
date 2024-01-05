@@ -37,3 +37,7 @@
 .toolbar {
   height: auto !important;
 }
+
+.editor-shell {
+  margin: 0 !important;
+}

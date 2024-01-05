@@ -6,14 +6,9 @@ import { GetCategoriesDto } from "./dto/getCategories.dto";
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get("test")
-  public test() {
-    return process.env["teste"];
-  }
-
   @Get()
   public async getCategories(@Query() params: GetCategoriesDto) {
-    return await this.categoryService.get(params.limit);
+    return await this.categoryService.getRandom(params.limit);
   }
 
   @Get("update-history")

@@ -30,9 +30,8 @@ export default function RegisterPage() {
         password: formData.get("password")
       })
     });
-    const response = await fetchJson.json();
 
-    console.log(response);
+    const response = await fetchJson.json();
 
     return response;
   }
@@ -48,14 +47,7 @@ export default function RegisterPage() {
           src="/images/inline-logotipo.png" 
           alt="technews logotipo" 
         />
-        
-        <div className="flex items-center border p-2 pl-4 gap-2 rounded-md cursor-pointer border-neutral-400 hover:border-neutral-600">
-          <FcGoogle className="text-2xl" />
-          <span>Cadastre-se com Google</span>
-        </div>
-
-        <div className="text-center py-2 text-neutral-500 select-none">Ou</div>
-
+ 
         <ClientFormRegister register={registerAction} />
       </div>
     </div>    

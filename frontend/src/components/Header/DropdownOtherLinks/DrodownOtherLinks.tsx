@@ -23,11 +23,13 @@ export function DropdownOtherLinks() {
         )}
       >
         <Link 
+          onClick={handleChangeDropdownState}
           className="bg-[rgb(255,255,255,0.03)] border border-neutral-800 p-1 rounded-md" 
           href={"/update-database"}>
           Atualizar base de dados</Link>          
 
         <Link 
+          onClick={handleChangeDropdownState}
           className="bg-[rgb(255,255,255,0.03)] border border-neutral-800 p-1 rounded-md" 
           href={"/create-news"}>
           Criar nova notícia</Link>            

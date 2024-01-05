@@ -6,10 +6,10 @@ import { Category } from "@prisma/client";
 export class CategoryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async get(limit: number): Promise<Category[]> {
-    const dbCategories = await this.prisma.category.findMany({
-      take: limit,
-    });
+  public async getRandom(limit: number): Promise<Category[]> {
+    const dbCategories = (await this.prisma.$queryRawUnsafe(
+      `SELECT * FROM "Category" ORDER BY RANDOM() LIMIT ${limit}`,
+    )) as Category[];
 
     return dbCategories;
   }
