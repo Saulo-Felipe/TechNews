@@ -7,7 +7,6 @@ import {
   ScrapeOneNews,
 } from "../../types/GeneralTypes";
 import { SocketGateway } from "./socket.gateway";
-import * as chromium from "chromium";
 
 @Injectable()
 export class ScraperService {
@@ -59,7 +58,8 @@ export class ScraperService {
     try {
       const browser = await puppeteer.launch({
         headless: true,
-        executablePath: chromium.path,
+        executablePath: "/usr/bin/google-chrome",
+        args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-gpu"],
       });
       const page = await browser.newPage();
       page.setDefaultNavigationTimeout(60000);
@@ -98,7 +98,8 @@ export class ScraperService {
     // scrapper configs
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath: chromium.path,
+      executablePath: "/usr/bin/google-chrome",
+      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-gpu"],
     });
     this.page = await browser.newPage();
     this.page.setDefaultNavigationTimeout(60000);
@@ -115,7 +116,7 @@ export class ScraperService {
     });
 
     const initialIndex = latestNewsResponseURLs.findIndex(
-      (item) => item.url === dbInitPoint.url,
+      (item) => item.url === dbInitPoint?.url,
     );
 
     latestNewsResponseURLs = latestNewsResponseURLs.slice(

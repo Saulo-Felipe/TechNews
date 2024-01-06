@@ -29,6 +29,7 @@ export class NewsService {
 
       return { success: "View adicionada com sucesso" };
     } catch (e) {
+      console.log(e);
       return { error: "Notícia não encontrada" };
     }
   }

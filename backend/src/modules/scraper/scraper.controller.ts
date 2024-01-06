@@ -44,6 +44,8 @@ export class ScraperContoller {
           `Categorias atualizadas: + ${response.data.length} categorias adicionadas`,
       });
     } catch (e) {
+      console.log(e);
+
       this.socketGateway.io.emit("new-message", {
         status: "error",
         message: "Ocorreu um erro interno no servidor",
@@ -76,6 +78,7 @@ export class ScraperContoller {
         message: `Atualização realizada com sucesso: + ${updatedNewsCount} novas notícias`,
       });
     } catch (e) {
+      console.log(e);
       this.socketGateway.io.emit("new-message", {
         status: "error",
         message: "Ocorreu um erro interno no servidor",
