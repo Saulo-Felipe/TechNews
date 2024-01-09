@@ -1,4 +1,3 @@
-import { FcGoogle } from "react-icons/fc";
 import Image from "next/image";
 import { Metadata } from "next";
 import { ClientFormLogin } from "./ClientFormLogin";

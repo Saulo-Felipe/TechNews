@@ -18,19 +18,21 @@ export function ClientFormRegister({ register }: ClientFormProps) {
   const msgTimeRef = useRef<NodeJS.Timeout>();
   const navigate = useRouter();
 
-  async function handleRegister(formData: FormData) {
+  async function handleRegister(event: React.FormEvent) {
     setIsLoading(true);
+    event.preventDefault();
 
-    register(formData).then((response: ValidatorResponse) => {
-      setMessage({ ...response });
+    const formData = new FormData(event.target as HTMLFormElement);
 
-      if (response.success) {
-        setTimeout(() => {
-          setIsLoading(false);
-          navigate.push("/auth/login");
-        }, 1000);
-      }
-    });
+    const response: ValidatorResponse = await register(formData);
+    setIsLoading(false);
+    setMessage({ ...response });
+
+    if (response.success) {
+      setTimeout(() => {
+        navigate.push("/auth/login");
+      }, 1000);
+    }
   }
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export function ClientFormRegister({ register }: ClientFormProps) {
   }, [message]);
 
   return (
-    <form action={handleRegister}>
+    <form onSubmit={handleRegister}>
       <div className="flex flex-col gap-1">
         <label className="w-max" htmlFor="username">Nome de usuário</label>
         <Input name="username" id="username" placeholder="Nome de usuário"/>

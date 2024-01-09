@@ -19,18 +19,21 @@ export function ClientFormLogin({ login }: ClientFormProps) {
   const msgTimeRef = useRef<NodeJS.Timeout>();
 
 
-  async function handleLogin(formData: FormData) {
+  async function handleLogin(event: React.FormEvent) {
     setIsLoading(true);
+    event.preventDefault();
 
-    login(formData).then(async (response: ValidatorResponse) => {
-      setMessage({ ...response });
-      setIsLoading(false);
+    const formData = new FormData(event.target as HTMLFormElement);
+    
+    const response: ValidatorResponse = await login(formData)
+    
+    setMessage({ ...response });
+    setIsLoading(false);
 
-      if (response.success) {
-        Cookies.set("auth_token", response.data);
-        setTimeout(() => window.location.href = "/", 1000);
-      }
-    });
+    if (response.success) {
+      Cookies.set("auth_token", response.data);
+      setTimeout(() => window.location.href = "/", 1000);
+    }
   }
 
   useEffect(() => {
@@ -44,7 +47,7 @@ export function ClientFormLogin({ login }: ClientFormProps) {
   }, [message]);
 
   return (
-    <form action={handleLogin}>
+    <form onSubmit={handleLogin}>
       <div className="flex flex-col gap-1">
         <label className="w-min" htmlFor="email-input">Email</label>
         <Input name="email" id="email-input" placeholder="Digite seu email" />
