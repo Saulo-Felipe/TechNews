@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import puppeteer, { Page } from "puppeteer";
+import puppeteer, { Page } from "puppeteer-core";
 import { PrismaService } from "../../database/prisma.service";
 import {
   DefaultResponse,
@@ -15,7 +15,7 @@ export class ScraperService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly socketGateway: SocketGateway,
-  ) {}
+  ) { }
 
   public async updateCNNCategories(points: {
     initial: string;
